@@ -23,9 +23,13 @@ while (true)
     {
         ShowTasks();
     }
-    else if(choice == "" || choice == null || choice != "1" || choice != "2")
+    else if(choice == "3")
     {
-        System.Console.WriteLine("Неизвестный пункт меню. Попробуйте ещё раз.");
+        SearchTask();
+    }
+    else
+    {
+        System.Console.WriteLine("Неизвестный пункт меню. Попробуйте ещё раз.\n");
     }
 }
 
@@ -35,8 +39,52 @@ static void ShowMenu()
     System.Console.WriteLine("===== Список задач =====");
     System.Console.WriteLine("1. Создать задачу");
     System.Console.WriteLine("2. Показать список задач");
+    System.Console.WriteLine("3. Найти задачу");
     System.Console.WriteLine("0. Выход");
     System.Console.Write("Выберите пункт: ");
+}
+
+static void SearchTask()
+{
+    System.Console.Write("Введите слово для поиска: ");
+    string? word = Console.ReadLine();
+
+    if (string.IsNullOrEmpty(word))
+    {
+        System.Console.WriteLine("Вы ничего не ввели.\n");
+        return;
+    }
+
+    List<TodoTask> task = LoadTask();
+
+    if(task.Count == 0)
+    {
+        System.Console.WriteLine("Задач пока нет\n");
+        return;
+    }
+
+    System.Console.WriteLine("№  | Создана          | Задача");
+    System.Console.WriteLine("----+------------------+---------------------------");
+
+    bool r = false;
+    foreach(var i in task)
+    {
+        if(i.Title != null)
+        {
+            if (i.Title.ToLower().Contains(word.ToLower()))
+            {
+                System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm} | {i.Title}");
+                r = true;
+            }
+        }
+        
+    }
+    if (!r)
+    {
+        System.Console.WriteLine("Ничего не нашлось.\n");
+        return;
+    }
+    System.Console.WriteLine();
 }
 
 static List<TodoTask> LoadTask()
@@ -63,7 +111,7 @@ static void ShowTasks()
 
     if(task.Count == 0)
     {
-        System.Console.WriteLine("Задач пока нет");
+        System.Console.WriteLine("Задач пока нет\n");
         return;
     }
 
@@ -74,6 +122,7 @@ static void ShowTasks()
     {
         System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm} | {i.Title}");
     }
+    System.Console.WriteLine();
 }
 static void CreateTask()
 {
@@ -97,7 +146,7 @@ static void CreateTask()
     }
 
     SaveTask(task);
-    System.Console.WriteLine($"Задача №{task.Id} создана.");
+    System.Console.WriteLine($"Задача №{task.Id} создана.\n");
 }
 
 static string ToCsvLine(TodoTask task)
