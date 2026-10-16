@@ -7,4 +7,6 @@ public interface IStorage
     void SaveTask(TodoTask task);
 
     List<TodoTask> Find(string word);
+
+    bool RemoveTask(int id);
 }

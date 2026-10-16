@@ -5,47 +5,31 @@ using System.Globalization;
 
 public class DeleteTasksCommandHandler(IStorage storage): ICommandHandler
 {
-    private const string FilePath = "tasks.csv";
-
     public void HandleCommand()
     {
         Console.Write("Введите номер задачи: ");
-        string? task_id = Console.ReadLine();
+        string? input = Console.ReadLine();
 
-        List<TodoTask> tasks = storage.LoadTask();
-        if (tasks.Count <= 0)
+        if (string.IsNullOrEmpty(input))
         {
-            Console.WriteLine("Список задач пуст");
+            System.Console.WriteLine("Номер задачи не введен");
             return;
         }
 
-        bool r = false;
-        for(int i = 0; i < tasks.Count; i++)
+        bool result = int.TryParse(input, out int taskId);
+        if (!result)
         {
-            if(tasks[i].Id == int.Parse(task_id))
-            {
-                tasks.RemoveAt(i);
-                r = true;
-                break;
-            }
-        }
-
-        if (!r)
-        {
-            System.Console.WriteLine("Такой Задачи нет");
+            System.Console.WriteLine("Неверный формат номера задачи");
             return;
         }
 
-        List<string> csvLines = new List<string>();
-
-        foreach (var task in tasks)
+        result = storage.RemoveTask(taskId);
+        if (!result)
         {
-            string line = $"{task.Id},{task.Title},{task.CreatedAt:yyyy-MM-dd HH:mm},{task.Done}";
-
-            csvLines.Add(line);
+            System.Console.WriteLine("Такой задачи нет");
+            return;
         }
 
-        File.WriteAllLines(FilePath, csvLines);
         System.Console.WriteLine("Задача Успешно Удалено!\n");
     }
 }

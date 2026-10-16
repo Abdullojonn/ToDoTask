@@ -4,7 +4,7 @@ namespace ToDoApp;
 
 internal class Storage : IStorage
 {
-    private const string FilePath = "tasks.csv";
+    public const string FilePath = "new_tasks.csv";
 
     public List<TodoTask> LoadTask()
     {
@@ -64,8 +64,39 @@ internal class Storage : IStorage
         return task;
     }
 
-    public List<TodoTask> Find(string word)
+    public bool RemoveTask(int id)
     {
-        throw new NotImplementedException();
+        List<TodoTask> tasks = LoadTask();
+        if (tasks.Count <= 0)
+        {
+            return true;
+        }
+
+        bool r = false;
+        for (int i = 0; i < tasks.Count; i++)
+        {
+            if (tasks[i].Id == id)
+            {
+                tasks.RemoveAt(i);
+                r = true;
+                break;
+            }
+        }
+
+        if (!r)
+        {
+            System.Console.WriteLine("Такой Задачи нет");
+            return false;
+        }
+
+        List<string> csvLines = new List<string>();
+
+        foreach (var task in tasks)
+        {
+            csvLines.Add(ToCsvLine(task));
+        }
+
+        File.WriteAllLines(FilePath, csvLines);
+        return true;
     }
 }

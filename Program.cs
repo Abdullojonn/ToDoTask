@@ -1,6 +1,11 @@
 ﻿using ToDoApp;
 using ToDoApp.CommandHandlers;
 
+// Dependency Injection
+
+
+// handler -> storage -> F
+
 var storage = new Storage();
 var createTaskHandler = new CreateTaskCommandHandler(storage);
 var showTasksHandler = new ShowTasksCommandHandler(storage);
