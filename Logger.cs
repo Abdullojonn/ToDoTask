@@ -27,4 +27,9 @@
         _streamWriter.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}] ERROR {message}");
         _streamWriter.Flush();
     }
+
+    internal void Close()
+    {
+        _streamWriter.Close();
+    }
 }

@@ -54,6 +54,8 @@ while (true)
     }
 }
 
+logger.Close();
+
 // здесь методы ShowMenu, CreateTask, ShowTasks, LoadTasks, ...
 static void ShowMenu()
 {
