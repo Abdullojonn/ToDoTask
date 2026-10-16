@@ -21,8 +21,8 @@ public class SearchTasksCommandHandler(IStorage storage) : ICommandHandler
             return;
         }
 
-        System.Console.WriteLine("№  | Создана          | Задача");
-        System.Console.WriteLine("----+------------------+---------------------------");
+        System.Console.WriteLine("№  | Создана          | Задача                         | Помечена");
+        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");  
 
         bool r = false;
         foreach (var i in task)
@@ -31,7 +31,7 @@ public class SearchTasksCommandHandler(IStorage storage) : ICommandHandler
             {
                 if (i.Title.ToLower().Contains(word.ToLower()))
                 {
-                    System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm} | {i.Title}");
+                    System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm}  | {i.Title}  | {i.Done}");
                     r = true;
                 }
             }

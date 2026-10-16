@@ -6,5 +6,5 @@ public class TodoTask
     public string? Title;
     public DateTime CreatedAt;
 
-    public IsComplete
+    public bool Done = false;
 }

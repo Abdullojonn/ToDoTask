@@ -12,12 +12,12 @@ public class ShowTasksCommandHandler(IStorage storage) : ICommandHandler
             return;
         }
 
-        System.Console.WriteLine("№  | Создана          | Задача");
-        System.Console.WriteLine("----+------------------+---------------------------");
+        System.Console.WriteLine("№  | Создана          | Задача                         | Помечена");
+        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");    
 
         foreach (var i in task)
         {
-            System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm} | {i.Title}");
+            System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm}  | {i.Title}  | {i.Done}");
         }
         System.Console.WriteLine();
     }
