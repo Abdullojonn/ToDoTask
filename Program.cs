@@ -4,13 +4,17 @@ using ToDoApp.CommandHandlers;
 // Dependency Injection
 
 
-// handler -> storage -> F
+// handler -> storage -> File
+// handler -> logger -> File
 
+
+var logger = new Logger();
 var storage = new Storage();
-var createTaskHandler = new CreateTaskCommandHandler(storage);
+
+var createTaskHandler = new CreateTaskCommandHandler(storage, logger);
 var showTasksHandler = new ShowTasksCommandHandler(storage);
 var searchTasksHandler = new SearchTasksCommandHandler(storage);
-var deleteTaskHandler = new DeleteTasksCommandHandler(storage);
+var deleteTaskHandler = new DeleteTasksCommandHandler(storage, logger);
 var doneTasksHandler = new DoneTasksCommandHandler(storage);
 
 Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>
@@ -19,7 +23,7 @@ Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICo
     { "2", showTasksHandler },
     { "3", searchTasksHandler },
     { "4", deleteTaskHandler },
-    {"5", doneTasksHandler}
+    { "5", doneTasksHandler}
 };
 
 

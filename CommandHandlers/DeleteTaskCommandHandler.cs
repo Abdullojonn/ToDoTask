@@ -3,7 +3,7 @@ using ToDoApp;
 using ToDoApp.CommandHandlers;
 using System.Globalization;
 
-public class DeleteTasksCommandHandler(IStorage storage): ICommandHandler
+public class DeleteTasksCommandHandler(IStorage storage, Logger logger): ICommandHandler
 {
     public void HandleCommand()
     {
@@ -31,5 +31,8 @@ public class DeleteTasksCommandHandler(IStorage storage): ICommandHandler
         }
 
         System.Console.WriteLine("Задача Успешно Удалено!\n");
+
+
+        logger.LogInfo("Удалена задача");
     }
 }
