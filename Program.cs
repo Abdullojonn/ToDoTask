@@ -29,7 +29,8 @@ Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICo
 
 while (true)
 {
-    ShowMenu();
+
+    ShowMenu();
     string? choice = Console.ReadLine();
 
     // в зависимости от choice вызвать CreateTask(), ShowTasks() или выйти
@@ -46,7 +47,9 @@ while (true)
 
     if (commandHandlers.ContainsKey(choice))
     {
-        commandHandlers[choice].HandleCommand();
+        Console.Clear();
+
+        commandHandlers[choice].HandleCommand();
     }
     else
     {
