@@ -18,7 +18,7 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
 
         foreach(var user in users)
         {
-            if(name.ToLower() == user.Name.ToLower())
+            if(name.ToLower() == user.Name!.ToLower())
             {
                 System.Console.WriteLine("Пользователь с таким именем уже есть.");
                 return;

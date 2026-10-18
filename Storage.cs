@@ -46,7 +46,7 @@ internal class Storage : IStorage
 
     private static string ToCsvLine(TodoTask task)
     {
-        return $"{task.Id},{task.Title},{task.CreatedAt:yyyy-MM-dd HH:mm},{task.Done}";
+        return $"{task.Id},{task.Title},{task.CreatedAt:yyyy-MM-dd HH:mm},{task.Done},{task.UserId}";
     }
 
     private static TodoTask FromCsvLine(string line)
@@ -58,6 +58,7 @@ internal class Storage : IStorage
         task.Title = parts[1];
         task.CreatedAt = DateTime.ParseExact(parts[2], "yyyy-MM-dd HH:mm", CultureInfo.InstalledUICulture);
         task.Done = bool.Parse(parts[3]);
+        task.UserId = int.Parse(parts[4]);
 
         return task;
     }

@@ -10,7 +10,7 @@ public class LogoutCommandHandler(UserSession userSession, Logger logger) : ICom
             return;
         }
 
-        string? name = userSession.CurrentUser.Name;
+        string? name = userSession.CurrentUser!.Name;
 
         userSession.CurrentUser = null;
 

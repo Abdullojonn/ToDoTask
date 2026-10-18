@@ -13,7 +13,7 @@ var storage = new Storage();
 var userStorage = new UserStorage();
 var session = new UserSession();
 
-var createTaskHandler = new CreateTaskCommandHandler(storage, logger);
+var createTaskHandler = new CreateTaskCommandHandler(storage, logger, session);
 var showTasksHandler = new ShowTasksCommandHandler(storage);
 var searchTasksHandler = new SearchTasksCommandHandler(storage);
 var deleteTaskHandler = new DeleteTasksCommandHandler(storage, logger);
@@ -75,7 +75,7 @@ static void ShowMenu(UserSession session)
     System.Console.WriteLine("===== Список задач =====");
     if (session.IsLoggedIn())
     {
-        System.Console.WriteLine($"Пользователь: {session.CurrentUser.Name}");
+        System.Console.WriteLine($"Пользователь: {session.CurrentUser!.Name}");
     }
     else
     {

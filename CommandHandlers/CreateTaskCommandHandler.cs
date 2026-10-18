@@ -2,10 +2,16 @@
 
 namespace ToDoApp;
 
-public class CreateTaskCommandHandler(IStorage storage, Logger logger) : ICommandHandler
+public class CreateTaskCommandHandler(IStorage storage, Logger logger, UserSession userSession) : ICommandHandler
 {
     public void HandleCommand()
     {
+        if (!userSession.IsLoggedIn())
+        {
+            System.Console.WriteLine("Сначала войдите.");
+            return;
+        }
+
         System.Console.Write("Введите название задачи: ");
 
         string? title = Console.ReadLine();
@@ -15,10 +21,10 @@ public class CreateTaskCommandHandler(IStorage storage, Logger logger) : IComman
             return;
         }
 
-
         TodoTask task = new TodoTask();
         task.Title = title;
         task.CreatedAt = DateTime.Now;
+        task.UserId = userSession.CurrentUser!.Id;
 
         storage.SaveTask(task);
         System.Console.WriteLine($"Задача №{task.Id} создана.\n");
