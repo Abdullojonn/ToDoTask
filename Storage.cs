@@ -4,7 +4,7 @@ namespace ToDoApp;
 
 internal class Storage : IStorage
 {
-    public const string FilePath = "new_tasks.csv";
+    public const string FilePath = "tasks.csv";
 
     public List<TodoTask> LoadTask()
     {
@@ -26,29 +26,27 @@ internal class Storage : IStorage
 
     public void SaveTask(TodoTask task)
     {
-        if (!File.Exists(FilePath))
+        List<TodoTask> tasks = LoadTask();
+
+        int mx = 0;
+        
+        foreach (var t in tasks)
         {
-            task.Id = 1;
-        }
-        else
-        {
-            task.Id = File.ReadAllLines(FilePath).Length + 1;
+            if(t.Id > mx)
+            {
+                mx = t.Id;
+            }
         }
 
-        if (!File.Exists(FilePath))
-        {
-            File.Create(FilePath).Close();
-        }
+        task.Id = mx + 1;
 
         string line = ToCsvLine(task);
-
         File.AppendAllText(FilePath, line + "\n");
     }
 
     private static string ToCsvLine(TodoTask task)
     {
         return $"{task.Id},{task.Title},{task.CreatedAt:yyyy-MM-dd HH:mm},{task.Done}";
-
     }
 
     private static TodoTask FromCsvLine(string line)
