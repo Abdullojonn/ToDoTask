@@ -1,7 +1,9 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class SearchTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
+public class SearchTasksCommandHandler(ITaskStorage storage, UserSession userSession) : ICommandHandler
 {
+    public string MenuName => "Поиск задач";
+
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())

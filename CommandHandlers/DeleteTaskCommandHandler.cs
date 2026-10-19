@@ -3,8 +3,11 @@ using ToDoApp;
 using ToDoApp.CommandHandlers;
 using System.Globalization;
 
-public class DeleteTasksCommandHandler(IStorage storage, UserSession userSession, Logger logger): ICommandHandler
+public class DeleteTasksCommandHandler(ITaskStorage storage, UserSession userSession, Logger logger): ICommandHandler
 {
+
+    public string MenuName => "Удалить задачу";
+
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())

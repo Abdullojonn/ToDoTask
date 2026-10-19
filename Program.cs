@@ -1,46 +1,53 @@
-﻿using ToDoApp;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ToDoApp;
 using ToDoApp.CommandHandlers;
 
+// DB
+// async await
+// web -> rest api
+// docker -> postgres
+// parallel programming
+
 // Dependency Injection
+var services = new ServiceCollection();
+
+services.AddSingleton<Logger>();
+services.AddSingleton<UserSession>();
+
+services.AddTransient<ITaskStorage, TasksStorage>();
+services.AddTransient<IUserStorage, UserStorage>();
+
+services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
+services.AddTransient<ICommandHandler, ShowTasksCommandHandler>();
+services.AddTransient<ICommandHandler, SearchTasksCommandHandler>();
+services.AddTransient<ICommandHandler, DeleteTasksCommandHandler>();
+services.AddTransient<ICommandHandler, DoneTasksCommandHandler>();
+services.AddTransient<ICommandHandler, MoveTaskCommandHandler>();
+
+services.AddTransient<ICommandHandler, RegisterUserCommandHandler>();
+services.AddTransient<ICommandHandler, LoginCommandHandler>();
+services.AddTransient<ICommandHandler, LogoutCommandHandler>();
+
+var provider = services.BuildServiceProvider();
+
+var logger = provider.GetRequiredService<Logger>();
+var session = provider.GetRequiredService<UserSession>();
 
 
-// handler -> storage -> File
-// handler -> logger -> File
+var handlers =  provider.GetServices<ICommandHandler>();
 
+Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>();
 
-var logger = new Logger();
-var storage = new Storage();
-var userStorage = new UserStorage();
-var session = new UserSession();
-
-var createTaskHandler = new CreateTaskCommandHandler(storage, logger, session);
-var showTasksHandler = new ShowTasksCommandHandler(storage, session);
-var searchTasksHandler = new SearchTasksCommandHandler(storage, session);
-var deleteTaskHandler = new DeleteTasksCommandHandler(storage, session, logger);
-var doneTasksHandler = new DoneTasksCommandHandler(storage, session);
-
-var registerHandler = new RegisterUserCommandHandler(userStorage, logger);
-var loginHandler = new LoginCommandHandler(userStorage, session, logger);
-var logoutHandler = new LogoutCommandHandler(session, logger);
-
-
-Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>
+for (int i = 0; i < handlers.Count(); i++)
 {
-    { "1", createTaskHandler },
-    { "2", showTasksHandler },
-    { "3", searchTasksHandler },
-    { "4", deleteTaskHandler },
-    { "5", doneTasksHandler},
-    { "6", registerHandler},
-    { "7", loginHandler},
-    { "8", logoutHandler}
-};
+    commandHandlers.Add((i + 1).ToString(), handlers.ElementAt(i));
+}
 
 
 while (true)
 {
 
-    ShowMenu(session);
+    ShowMenu(session, commandHandlers);
     string? choice = Console.ReadLine();
 
  // в зависимости от choice вызвать CreateTask(), ShowTasks() или выйти
@@ -70,7 +77,7 @@ while (true)
 logger.Close();
 
 // здесь методы ShowMenu, CreateTask, ShowTasks, LoadTasks, ...
-static void ShowMenu(UserSession session)
+static void ShowMenu(UserSession session, Dictionary<string, ICommandHandler> commandHandlers)
 {
     System.Console.WriteLine("===== Список задач =====");
     if (session.IsLoggedIn())
@@ -82,14 +89,12 @@ static void ShowMenu(UserSession session)
         System.Console.WriteLine("Вы не вошли.");
     }
 
-    System.Console.WriteLine("1. Создать задачу");
-    System.Console.WriteLine("2. Показать список задач");
-    System.Console.WriteLine("3. Найти задачу");
-    System.Console.WriteLine("4. Удалить задачу");
-    System.Console.WriteLine("5. Помечать задачу");
-    System.Console.WriteLine("6. Зарегистрироваться");
-    System.Console.WriteLine("7. Войти");
-    System.Console.WriteLine("8. Выйти из аккаунта");
-    System.Console.WriteLine("0. Выход");
+    foreach (var key in commandHandlers.Keys)
+    {
+        var handler = commandHandlers[key];
+        System.Console.WriteLine($"{key}. {handler.MenuName}");
+    }
+
+    System.Console.WriteLine("0. Закрыть");
     System.Console.Write("Выберите пункт: ");
 }

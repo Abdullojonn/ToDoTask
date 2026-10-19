@@ -2,6 +2,8 @@ using ToDoApp.CommandHandlers;
 
 public class LogoutCommandHandler(UserSession userSession, Logger logger) : ICommandHandler
 {
+
+    public string MenuName => "Выйти";
     public void HandleCommand()
     {
         if (!userSession.IsLoggedIn())

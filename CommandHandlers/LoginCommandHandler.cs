@@ -3,6 +3,8 @@ using ToDoApp.CommandHandlers;
 
 public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger) : ICommandHandler
 {
+    public string MenuName => "Войти";
+
     public void HandleCommand()
     {
         System.Console.Write("Введите Имя: ");
