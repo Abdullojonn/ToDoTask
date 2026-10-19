@@ -4,11 +4,18 @@ using ToDoApp.CommandHandlers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-public class DoneTasksCommandHandler(IStorage storage) : ICommandHandler
+public class DoneTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
 {
     private const string FilePath = "tasks.csv";
     public void HandleCommand()
     {
+        if(!userSession.IsLoggedIn())
+        {
+            System.Console.WriteLine("Сначала войдите");
+            return;
+        }
+
+
         System.Console.Write("Введите номер задачи: ");
         string? input = Console.ReadLine();
 

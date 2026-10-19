@@ -1,9 +1,15 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class SearchTasksCommandHandler(IStorage storage) : ICommandHandler
+public class SearchTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
 {
     public void HandleCommand()
     {
+        if(!userSession.IsLoggedIn())
+        {
+            System.Console.WriteLine("Сначала войдите");
+            return;
+        }
+
         System.Console.Write("Введите слово для поиска: ");
         string? word = Console.ReadLine();
 

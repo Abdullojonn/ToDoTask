@@ -3,10 +3,16 @@ using ToDoApp;
 using ToDoApp.CommandHandlers;
 using System.Globalization;
 
-public class DeleteTasksCommandHandler(IStorage storage, Logger logger): ICommandHandler
+public class DeleteTasksCommandHandler(IStorage storage, UserSession userSession, Logger logger): ICommandHandler
 {
     public void HandleCommand()
     {
+        if(!userSession.IsLoggedIn())
+        {
+            System.Console.WriteLine("Сначала войдите");
+            return;
+        }
+        
         Console.Write("Введите номер задачи: ");
         string? input = Console.ReadLine();
 

@@ -14,10 +14,10 @@ var userStorage = new UserStorage();
 var session = new UserSession();
 
 var createTaskHandler = new CreateTaskCommandHandler(storage, logger, session);
-var showTasksHandler = new ShowTasksCommandHandler(storage);
-var searchTasksHandler = new SearchTasksCommandHandler(storage);
-var deleteTaskHandler = new DeleteTasksCommandHandler(storage, logger);
-var doneTasksHandler = new DoneTasksCommandHandler(storage);
+var showTasksHandler = new ShowTasksCommandHandler(storage, session);
+var searchTasksHandler = new SearchTasksCommandHandler(storage, session);
+var deleteTaskHandler = new DeleteTasksCommandHandler(storage, session, logger);
+var doneTasksHandler = new DoneTasksCommandHandler(storage, session);
 
 var registerHandler = new RegisterUserCommandHandler(userStorage, logger);
 var loginHandler = new LoginCommandHandler(userStorage, session, logger);
