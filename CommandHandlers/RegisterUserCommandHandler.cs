@@ -3,6 +3,7 @@ using ToDoApp.CommandHandlers;
 
 public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger) : ICommandHandler
 {
+    public string MenuName => "Зарегистрировать пользователя";
     public void HandleCommand()
     {
         System.Console.Write("Введите имя: ");

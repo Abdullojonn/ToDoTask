@@ -2,8 +2,10 @@
 
 namespace ToDoApp;
 
-public class CreateTaskCommandHandler(IStorage storage, Logger logger, UserSession userSession) : ICommandHandler
+public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserSession userSession) : ICommandHandler
 {
+    public string MenuName => "Создать задачу";
+
     public void HandleCommand()
     {
         if (!userSession.IsLoggedIn())

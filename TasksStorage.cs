@@ -2,7 +2,7 @@
 
 namespace ToDoApp;
 
-internal class Storage : IStorage
+internal class TasksStorage : ITaskStorage
 {
     public const string FilePath = "tasks.csv";
 

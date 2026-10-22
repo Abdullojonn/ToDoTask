@@ -1,6 +1,6 @@
 ﻿namespace ToDoApp;
 
-public interface IStorage
+public interface ITaskStorage
 {
     List<TodoTask> LoadTask();
 

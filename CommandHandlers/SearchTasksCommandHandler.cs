@@ -2,6 +2,8 @@
 
 public class SearchTasksCommandHandler(IStorage storage, UserSession userSession, Logger logger) : ICommandHandler
 {
+    public string MenuName => "Поиск задач";
+
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())

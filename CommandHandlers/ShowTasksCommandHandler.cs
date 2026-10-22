@@ -1,7 +1,8 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class ShowTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
+public class ShowTasksCommandHandler(ITaskStorage storage, UserSession userSession) : ICommandHandler
 {
+    public string MenuName => "Показать задачи";
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())
