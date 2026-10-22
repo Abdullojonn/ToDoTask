@@ -32,7 +32,7 @@ internal class Storage : IStorage
         
         foreach (var t in tasks)
         {
-            if(t.Id > mx)
+            if(t.UserId == task.UserId && t.Id > mx)
             {
                 mx = t.Id;
             }
@@ -63,9 +63,10 @@ internal class Storage : IStorage
         return task;
     }
 
-    public bool RemoveTask(int id)
+    public bool RemoveTask(int id, int userId)
     {
         List<TodoTask> tasks = LoadTask();
+
         if (tasks.Count <= 0)
         {
             return true;
@@ -74,7 +75,7 @@ internal class Storage : IStorage
         bool r = false;
         for (int i = 0; i < tasks.Count; i++)
         {
-            if (tasks[i].Id == id)
+            if (tasks[i].Id == id && tasks[i].UserId == userId)
             {
                 tasks.RemoveAt(i);
                 r = true;
@@ -90,12 +91,13 @@ internal class Storage : IStorage
 
         List<string> csvLines = new List<string>();
 
-        foreach (var task in tasks)
+        foreach (var taskk in tasks)
         {
-            csvLines.Add(ToCsvLine(task));
+            csvLines.Add(ToCsvLine(taskk));
         }
 
         File.WriteAllLines(FilePath, csvLines);
         return true;
+
     }
 }

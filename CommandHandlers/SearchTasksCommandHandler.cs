@@ -1,6 +1,6 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class SearchTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
+public class SearchTasksCommandHandler(IStorage storage, UserSession userSession, Logger logger) : ICommandHandler
 {
     public void HandleCommand()
     {
@@ -9,6 +9,8 @@ public class SearchTasksCommandHandler(IStorage storage, UserSession userSession
             System.Console.WriteLine("Сначала войдите");
             return;
         }
+
+        List<TodoTask> task = storage.LoadTask();
 
         System.Console.Write("Введите слово для поиска: ");
         string? word = Console.ReadLine();
@@ -19,7 +21,6 @@ public class SearchTasksCommandHandler(IStorage storage, UserSession userSession
             return;
         }
 
-        List<TodoTask> task = storage.LoadTask();
 
         if (task.Count == 0)
         {
@@ -33,7 +34,7 @@ public class SearchTasksCommandHandler(IStorage storage, UserSession userSession
         bool r = false;
         foreach (var i in task)
         {
-            if (i.Title != null)
+            if (i.Title != null && userSession.CurrentUser?.Id == i.UserId)
             {
                 if (i.Title.ToLower().Contains(word.ToLower()))
                 {
@@ -48,6 +49,9 @@ public class SearchTasksCommandHandler(IStorage storage, UserSession userSession
             System.Console.WriteLine("Ничего не нашлось.\n");
             return;
         }
+        
+        logger.LogInfo("ввывел свои задачи.");
         System.Console.WriteLine();
+
     }
 }

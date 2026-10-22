@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class DoneTasksCommandHandler(IStorage storage, UserSession userSession) : ICommandHandler
 {
-    private const string FilePath = "tasks.csv";
+    //private const string FilePath = "tasks.csv";
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())
@@ -14,7 +14,6 @@ public class DoneTasksCommandHandler(IStorage storage, UserSession userSession) 
             System.Console.WriteLine("Сначала войдите");
             return;
         }
-
 
         System.Console.Write("Введите номер задачи: ");
         string? input = Console.ReadLine();
@@ -35,7 +34,7 @@ public class DoneTasksCommandHandler(IStorage storage, UserSession userSession) 
 
         foreach (var task in tasks)
         {
-            if (task.Id == taskId)
+            if (task.Id == taskId && task.UserId == userSession.CurrentUser?.Id)
             {
                 task.Done = true;
             }
@@ -49,7 +48,7 @@ public class DoneTasksCommandHandler(IStorage storage, UserSession userSession) 
             csv.Add(line);
         }
 
-        File.WriteAllLines(FilePath, csv);
+        File.WriteAllLines(Storage.FilePath, csv);
         System.Console.WriteLine("Задача Успешно Помечена.\n");
     }
 }

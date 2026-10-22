@@ -15,7 +15,7 @@ var session = new UserSession();
 
 var createTaskHandler = new CreateTaskCommandHandler(storage, logger, session);
 var showTasksHandler = new ShowTasksCommandHandler(storage, session);
-var searchTasksHandler = new SearchTasksCommandHandler(storage, session);
+var searchTasksHandler = new SearchTasksCommandHandler(storage, session, logger);
 var deleteTaskHandler = new DeleteTasksCommandHandler(storage, session, logger);
 var doneTasksHandler = new DoneTasksCommandHandler(storage, session);
 
