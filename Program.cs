@@ -1,13 +1,6 @@
 ﻿using ToDoApp;
 using ToDoApp.CommandHandlers;
 
-// Dependency Injection
-
-
-// handler -> storage -> File
-// handler -> logger -> File
-
-
 var logger = new Logger();
 var storage = new Storage();
 var userStorage = new UserStorage();
@@ -50,13 +43,13 @@ while (true)
         break;
     }
     if (string.IsNullOrEmpty(choice))
-    {
-        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
-        break;
-    }
+    {
+        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
+        break;
+    }
 
-    if (commandHandlers.ContainsKey(choice))
-    {
+    if (commandHandlers.ContainsKey(choice))
+    {
         Console.Clear();
 
         commandHandlers[choice].HandleCommand();

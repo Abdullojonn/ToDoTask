@@ -6,23 +6,33 @@ internal class Storage : IStorage
 {
     public const string FilePath = "tasks.csv";
 
-    public List<TodoTask> LoadTask()
+public List<TodoTask> LoadTask()
+{
+    List<TodoTask> tasks = new List<TodoTask>();
+
+    if (!File.Exists(FilePath))
     {
-        List<TodoTask> task = new List<TodoTask>();
-
-        if (!File.Exists(FilePath))
-        {
-            return task;
-        }
-
-        string[] parts = File.ReadAllLines(FilePath);
-
-        foreach (var i in parts)
-        {
-            task.Add(FromCsvLine(i));
-        }
-        return task;
+        return tasks;
     }
+
+    string[] parts = File.ReadAllLines(FilePath);
+
+    foreach (var line in parts)
+    {
+        if (string.IsNullOrWhiteSpace(line))
+        {
+            continue;
+        }
+
+        var task = FromCsvLine(line);
+        if (task != null)
+        {
+            tasks.Add(task);
+        }
+    }
+
+    return tasks;
+}
 
     public void SaveTask(TodoTask task)
     {
@@ -48,20 +58,25 @@ internal class Storage : IStorage
     {
         return $"{task.Id},{task.Title},{task.CreatedAt:yyyy-MM-dd HH:mm},{task.Done},{task.UserId}";
     }
+private static TodoTask? FromCsvLine(string line)
+{
+    string[] parts = line.Split(",");
 
-    private static TodoTask FromCsvLine(string line)
+    if (parts.Length < 5)
     {
-        TodoTask task = new TodoTask();
-        string[] parts = line.Split(",");
-
-        task.Id = int.Parse(parts[0]);
-        task.Title = parts[1];
-        task.CreatedAt = DateTime.ParseExact(parts[2], "yyyy-MM-dd HH:mm", CultureInfo.InstalledUICulture);
-        task.Done = bool.Parse(parts[3]);
-        task.UserId = int.Parse(parts[4]);
-
-        return task;
+        Console.WriteLine($"Пропущена некорректная строка: {line}");
+        return null;
     }
+
+    TodoTask task = new TodoTask();
+    task.Id = int.Parse(parts[0]);
+    task.Title = parts[1];
+    task.CreatedAt = DateTime.ParseExact(parts[2], "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture);
+    task.Done = bool.Parse(parts[3]);
+    task.UserId = int.Parse(parts[4]);
+
+    return task;
+}
 
     public bool RemoveTask(int id, int userId)
     {
