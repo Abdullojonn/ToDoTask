@@ -1,6 +1,6 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class SearchTasksCommandHandler(IStorage storage, UserSession userSession, Logger logger) : ICommandHandler
+public class SearchTasksCommandHandler(ITaskStorage storage, UserSession userSession, Logger logger) : ICommandHandler
 {
     public string MenuName => "Поиск задач";
 

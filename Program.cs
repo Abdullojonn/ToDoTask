@@ -3,7 +3,7 @@ using ToDoApp;
 using ToDoApp.CommandHandlers;
 
 var logger = new Logger();
-var storage = new Storage();
+var storage = new TasksStorage();
 var userStorage = new UserStorage();
 var session = new UserSession();
 
@@ -20,8 +20,15 @@ var logoutHandler = new LogoutCommandHandler(session, logger);
 
 Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>
 {
-    commandHandlers.Add((i + 1).ToString(), handlers.ElementAt(i));
-}
+    { "1", createTaskHandler },
+    { "2", showTasksHandler },
+    { "3", searchTasksHandler },
+    { "4", deleteTaskHandler },
+    { "5", doneTasksHandler},
+    { "6", registerHandler},
+    { "7", loginHandler},
+    { "8", logoutHandler}
+};
 
 
 while (true)
@@ -69,11 +76,17 @@ static void ShowMenu(UserSession session, Dictionary<string, ICommandHandler> co
         System.Console.WriteLine("Вы не вошли.");
     }
 
-    foreach (var key in commandHandlers.Keys)
-    {
-        var handler = commandHandlers[key];
-        System.Console.WriteLine($"{key}. {handler.MenuName}");
-    }
+    System.Console.WriteLine("1. Создать задачу");
+    System.Console.WriteLine("2. Показать список задач");
+    System.Console.WriteLine("3. Найти задачу");
+    System.Console.WriteLine("4. Удалить задачу");
+    System.Console.WriteLine("5. Помечать задачу");
+    System.Console.WriteLine("6. Зарегистрироваться");
+    System.Console.WriteLine("7. Войти");
+    System.Console.WriteLine("8. Выйти из аккаунта");
+    System.Console.WriteLine("0. Выход");
+    System.Console.Write("Выберите пункт: ");
+
 
     System.Console.WriteLine("0. Закрыть");
     System.Console.Write("Выберите пункт: ");
