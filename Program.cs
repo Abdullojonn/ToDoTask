@@ -2,33 +2,46 @@
 using ToDoApp;
 using ToDoApp.CommandHandlers;
 
-var logger = new Logger();
-var storage = new TasksStorage();
-var userStorage = new UserStorage();
-var session = new UserSession();
+// DB
+// async await
+// web -> rest api
+// docker -> postgres
+// parallel programming
 
-var createTaskHandler = new CreateTaskCommandHandler(storage, logger, session);
-var showTasksHandler = new ShowTasksCommandHandler(storage, session);
-var searchTasksHandler = new SearchTasksCommandHandler(storage, session, logger);
-var deleteTaskHandler = new DeleteTasksCommandHandler(storage, session, logger);
-var doneTasksHandler = new DoneTasksCommandHandler(storage, session);
+// Dependency Injection
+var services = new ServiceCollection();
 
-var registerHandler = new RegisterUserCommandHandler(userStorage, logger);
-var loginHandler = new LoginCommandHandler(userStorage, session, logger);
-var logoutHandler = new LogoutCommandHandler(session, logger);
+services.AddSingleton<Logger>();
+services.AddSingleton<UserSession>();
+
+services.AddTransient<ITaskStorage, TasksStorage>();
+services.AddTransient<IUserStorage, UserStorage>();
+
+services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
+services.AddTransient<ICommandHandler, ShowTasksCommandHandler>();
+services.AddTransient<ICommandHandler, SearchTasksCommandHandler>();
+services.AddTransient<ICommandHandler, DeleteTasksCommandHandler>();
+services.AddTransient<ICommandHandler, DoneTasksCommandHandler>();
+services.AddTransient<ICommandHandler, MoveTaskCommandHandler>();
+
+services.AddTransient<ICommandHandler, RegisterUserCommandHandler>();
+services.AddTransient<ICommandHandler, LoginCommandHandler>();
+services.AddTransient<ICommandHandler, LogoutCommandHandler>();
+
+var provider = services.BuildServiceProvider();
+
+var logger = provider.GetRequiredService<Logger>();
+var session = provider.GetRequiredService<UserSession>();
 
 
-Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>
+var handlers =  provider.GetServices<ICommandHandler>();
+
+Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>();
+
+for (int i = 0; i < handlers.Count(); i++)
 {
-    { "1", createTaskHandler },
-    { "2", showTasksHandler },
-    { "3", searchTasksHandler },
-    { "4", deleteTaskHandler },
-    { "5", doneTasksHandler},
-    { "6", registerHandler},
-    { "7", loginHandler},
-    { "8", logoutHandler}
-};
+    commandHandlers.Add((i + 1).ToString(), handlers.ElementAt(i));
+}
 
 
 while (true)
@@ -44,13 +57,13 @@ while (true)
         break;
     }
     if (string.IsNullOrEmpty(choice))
-    {
-        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
-        break;
-    }
+    {
+        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
+        break;
+    }
 
-    if (commandHandlers.ContainsKey(choice))
-    {
+    if (commandHandlers.ContainsKey(choice))
+    {
         Console.Clear();
 
         commandHandlers[choice].HandleCommand();
@@ -76,17 +89,11 @@ static void ShowMenu(UserSession session, Dictionary<string, ICommandHandler> co
         System.Console.WriteLine("Вы не вошли.");
     }
 
-    System.Console.WriteLine("1. Создать задачу");
-    System.Console.WriteLine("2. Показать список задач");
-    System.Console.WriteLine("3. Найти задачу");
-    System.Console.WriteLine("4. Удалить задачу");
-    System.Console.WriteLine("5. Помечать задачу");
-    System.Console.WriteLine("6. Зарегистрироваться");
-    System.Console.WriteLine("7. Войти");
-    System.Console.WriteLine("8. Выйти из аккаунта");
-    System.Console.WriteLine("0. Выход");
-    System.Console.Write("Выберите пункт: ");
-
+    foreach (var key in commandHandlers.Keys)
+    {
+        var handler = commandHandlers[key];
+        System.Console.WriteLine($"{key}. {handler.MenuName}");
+    }
 
     System.Console.WriteLine("0. Закрыть");
     System.Console.Write("Выберите пункт: ");

@@ -2,5 +2,8 @@
 
 public interface ICommandHandler
 {
+    public string MenuName { get; }
+
+
     void HandleCommand();
 }

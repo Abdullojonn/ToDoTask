@@ -6,7 +6,8 @@ using System.Runtime.CompilerServices;
 
 public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSession) : ICommandHandler
 {
-    //private const string FilePath = "tasks.csv";
+    public string MenuName => "Отметить задачу как выполненную";
+
     public void HandleCommand()
     {
         if(!userSession.IsLoggedIn())
