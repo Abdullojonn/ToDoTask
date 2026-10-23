@@ -48,7 +48,7 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
             csv.Add(line);
         }
 
-        File.WriteAllLines(Storage.FilePath, csv);
+        File.WriteAllLines(TasksStorage.FilePath, csv);
         System.Console.WriteLine("Задача Успешно Помечена.\n");
     }
 }
