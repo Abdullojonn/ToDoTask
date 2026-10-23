@@ -42,6 +42,6 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         System.Console.WriteLine($"Задача №{task.Id} создана.\n");
 
 
-        logger.LogInfo("Создана задача");
+        logger.LogInfo($"Создана задача {task.Id} от пользователья {userSession.CurrentUser.Name}");
     }
 }

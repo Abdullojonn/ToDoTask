@@ -44,7 +44,7 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
 
         foreach(var i in tasks)
         {
-            string? line = $"{i.Id},{i.Title},{i.CreatedAt:yyyy-MM-dd HH:mm},{i.Done}";
+            string? line = $"{i.Id},{i.Title},{i.CreatedAt:yyyy-MM-dd HH:mm},{i.Done},{i.UserId}";
             csv.Add(line);
         }
 
