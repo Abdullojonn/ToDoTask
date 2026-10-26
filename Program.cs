@@ -14,8 +14,10 @@ var services = new ServiceCollection();
 services.AddSingleton<Logger>();
 services.AddSingleton<UserSession>();
 
+services.AddSingleton(new Database("Data Source=todo.db"));
+
 services.AddTransient<ITaskStorage, TasksStorage>();
-services.AddTransient<IUserStorage, UserStorage>();
+services.AddTransient<IUserStorage, SqliteUserStorage>();
 
 services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
 services.AddTransient<ICommandHandler, ShowTasksCommandHandler>();
@@ -29,6 +31,9 @@ services.AddTransient<ICommandHandler, LoginCommandHandler>();
 services.AddTransient<ICommandHandler, LogoutCommandHandler>();
 
 var provider = services.BuildServiceProvider();
+
+// Создать таблицы, если базы ещё нет
+provider.GetRequiredService<Database>().EnsureCreated();
 
 var logger = provider.GetRequiredService<Logger>();
 var session = provider.GetRequiredService<UserSession>();
