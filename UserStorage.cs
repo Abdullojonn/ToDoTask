@@ -19,7 +19,6 @@ public class UserStorage : IUserStorage
 
         return user;
     }
-
     public void SaveUser(User user)
     {
         List<User> users = LoadUsers();
@@ -42,7 +41,6 @@ public class UserStorage : IUserStorage
     {
         return $"{user.Id},{user.Name}";
     }
-
     private static User FromCsvLine(string line)
     {
         User user = new User();

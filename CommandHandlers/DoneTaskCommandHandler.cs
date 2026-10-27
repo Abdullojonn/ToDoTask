@@ -16,7 +16,6 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
             return;
         }
 
-
         System.Console.Write("Введите номер задачи: ");
         string? input = Console.ReadLine();
 
@@ -36,7 +35,7 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
 
         foreach (var task in tasks)
         {
-            if (task.Id == taskId)
+            if (task.Id == taskId && task.UserId == userSession.CurrentUser?.Id)
             {
                 task.Done = true;
             }
@@ -46,11 +45,11 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
 
         foreach(var i in tasks)
         {
-            string? line = $"{i.Id},{i.Title},{i.CreatedAt:yyyy-MM-dd HH:mm},{i.Done}";
+            string? line = $"{i.Id},{i.Title},{i.CreatedAt:yyyy-MM-dd HH:mm},{i.Done},{i.UserId}";
             csv.Add(line);
         }
 
-        File.WriteAllLines(FilePath, csv);
+        File.WriteAllLines(TasksStorage.FilePath, csv);
         System.Console.WriteLine("Задача Успешно Помечена.\n");
     }
 }

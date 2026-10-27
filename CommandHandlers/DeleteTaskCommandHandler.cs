@@ -32,7 +32,8 @@ public class DeleteTasksCommandHandler(ITaskStorage storage, UserSession userSes
             return;
         }
 
-        result = storage.RemoveTask(taskId);
+        result = storage.RemoveTask(taskId, userSession.CurrentUser!.Id);
+
         if (!result)
         {
             System.Console.WriteLine("Такой задачи нет");

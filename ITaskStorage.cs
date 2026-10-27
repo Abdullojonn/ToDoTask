@@ -6,7 +6,5 @@ public interface ITaskStorage
 
     void SaveTask(TodoTask task);
 
-    bool RemoveTask(int id);
-
-    bool MakeDone(int id);
+    bool RemoveTask(int id, int userId);
 }
