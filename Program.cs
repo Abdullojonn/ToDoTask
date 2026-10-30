@@ -16,7 +16,7 @@ services.AddSingleton<UserSession>();
 
 services.AddSingleton(new Database("Data Source=todo.db"));
 
-services.AddTransient<ITaskStorage, TasksStorage>();
+services.AddTransient<ITaskStorage, SQliteTasksStorage>();
 services.AddTransient<IUserStorage, SqliteUserStorage>();
 
 services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
