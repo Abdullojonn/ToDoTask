@@ -4,3 +4,4 @@ obj/
 /tasks.csv
 /logs.txt
 /users.csv
+/todo.db
