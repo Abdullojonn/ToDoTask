@@ -2,6 +2,7 @@
 {
     private string logFilePath = "logs.txt";
 
+
     readonly private StreamWriter _streamWriter;
 
     public Logger()
