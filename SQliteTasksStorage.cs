@@ -11,7 +11,7 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
 
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId FROM Users ORDER BY Id";
+        command.CommandText = "SELECT Id, Title, Done, UserId FROM Users ORDER BY Id";
 
         using var reader = command.ExecuteReader();
         while (reader.Read())

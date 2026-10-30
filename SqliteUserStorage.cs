@@ -10,7 +10,8 @@ public class SqliteUserStorage(Database database) : IUserStorage
 
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Name, CreatedAt, Done, UserId FROM Users ORDER BY Id";
+        command.CommandText = "SELECT Id, Name FROM Users ORDER BY Id";
+
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
