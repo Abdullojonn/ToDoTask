@@ -29,7 +29,7 @@ public class Database(string connectionString)
                 Id INTEGER PRIMARY KEY,
                 Title TEXT NOT NULL,
                 CreatedAt TEXT NOT NULL,
-                Done INTEGER NOT NULL,
+                Done INTEGER NOT NULL DEFAULT 0,
                 UserId INTEGER NOT NULL
             );
 

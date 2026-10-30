@@ -11,7 +11,7 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
 
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Title, Done, UserId FROM Users ORDER BY Id";
+        command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId FROM Tasks ORDER BY Id";
 
         using var reader = command.ExecuteReader();
         while (reader.Read())
@@ -33,13 +33,13 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
 
-        command.CommandText = @"INSERT INTO Task (Title, CreatedAt, Done, UserId) 
+        command.CommandText = @"INSERT INTO Tasks (Title, CreatedAt, Done, UserId) 
                                 VALUES ($title, $createdAt, $done, $userId)
                                 RETURNING Id";
         
         command.Parameters.AddWithValue("$title", task.Title);
         command.Parameters.AddWithValue("$createdAt", task.CreatedAt.ToString("yyyy-MM-dd HH:mm"));
-        command.Parameters.AddWithValue("$done", task.Done);
+        command.Parameters.AddWithValue("$done", task.Done ? 1 : 0);
         command.Parameters.AddWithValue("$userId", task.UserId);
 
         task.Id = Convert.ToInt32(command.ExecuteScalar());
