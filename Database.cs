@@ -22,11 +22,17 @@ public class Database(string connectionString)
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Users (
                 Id   INTEGER PRIMARY KEY,
-                Name TEXT    NOT NULL UNIQUE,
-                CreatedAt TEXT NOT NULL,
-                Done INTEGER NOT NULL DEFAULT 0,
-                UserId INTEGER NOT NULL
+                Name TEXT    NOT NULL UNIQUE
             );
+
+            CREATE TABLE IF NOT EXISTS Tasks(
+                Id INTEGER PRIMARY KEY,
+                Title TEXT NOT NULL,
+                CreatedAt TEXT NOT NULL,
+                Done INTEGER NOT NULL,
+                UserId INTEGER NOT NULL,
+            );
+            
             """;
         command.ExecuteNonQuery();
     }
