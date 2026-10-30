@@ -25,7 +25,7 @@ public class Database(string connectionString)
                 Name TEXT    NOT NULL UNIQUE,
                 CreatedAt TEXT NOT NULL,
                 Done INTEGER NOT NULL DEFAULT 0,
-                UserId INTEGER NOT NULL,
+                UserId INTEGER NOT NULL
             );
             """;
         command.ExecuteNonQuery();
