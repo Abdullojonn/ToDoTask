@@ -16,7 +16,7 @@ services.AddSingleton<UserSession>();
 
 services.AddSingleton(new Database("Data Source=todo.db"));
 
-services.AddTransient<ITaskStorage, TasksStorage>();
+services.AddTransient<ITaskStorage, SQliteTasksStorage>();
 services.AddTransient<IUserStorage, SqliteUserStorage>();
 
 services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
@@ -62,13 +62,13 @@ while (true)
         break;
     }
     if (string.IsNullOrEmpty(choice))
-    {
-        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
-        break;
-    }
+    {
+        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
+        break;
+    }
 
-    if (commandHandlers.ContainsKey(choice))
-    {
+    if (commandHandlers.ContainsKey(choice))
+    {
         Console.Clear();
 
         commandHandlers[choice].HandleCommand();

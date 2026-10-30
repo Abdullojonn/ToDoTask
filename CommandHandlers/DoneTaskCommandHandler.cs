@@ -3,6 +3,7 @@ using ToDoApp;
 using ToDoApp.CommandHandlers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Reflection.Metadata;
 
 public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSession) : ICommandHandler
 {
@@ -33,23 +34,14 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
             return;
         }
 
-        foreach (var task in tasks)
+        bool done = storage.Done(taskId, userSession.CurrentUser!.Id);
+
+        if (!done)
         {
-            if (task.Id == taskId && task.UserId == userSession.CurrentUser?.Id)
-            {
-                task.Done = true;
-            }
+            System.Console.WriteLine("Такой Задачи Нет");
+            return;
         }
-
-        List<string> csv = new List<string>();
-
-        foreach(var i in tasks)
-        {
-            string? line = $"{i.Id},{i.Title},{i.CreatedAt:yyyy-MM-dd HH:mm},{i.Done},{i.UserId}";
-            csv.Add(line);
-        }
-
-        File.WriteAllLines(TasksStorage.FilePath, csv);
+        
         System.Console.WriteLine("Задача Успешно Помечена.\n");
     }
 }

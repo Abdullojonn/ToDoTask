@@ -1,4 +1,6 @@
-﻿namespace ToDoApp;
+﻿using System.Reflection.Metadata;
+
+namespace ToDoApp;
 
 public interface ITaskStorage
 {
@@ -7,4 +9,6 @@ public interface ITaskStorage
     void SaveTask(TodoTask task);
 
     bool RemoveTask(int id, int userId);
+
+    bool Done(int id, int userId);
 }

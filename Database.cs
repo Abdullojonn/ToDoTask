@@ -24,10 +24,16 @@ public class Database(string connectionString)
                 Id   INTEGER PRIMARY KEY,
                 Name TEXT    NOT NULL UNIQUE
             );
+
+            CREATE TABLE IF NOT EXISTS Tasks(
+                Id INTEGER PRIMARY KEY,
+                Title TEXT NOT NULL,
+                CreatedAt TEXT NOT NULL,
+                Done INTEGER NOT NULL DEFAULT 0,
+                UserId INTEGER NOT NULL
+            );
+
             """;
-
-        // TODO (урок 7): добавить сюда CREATE TABLE для задач
-
         command.ExecuteNonQuery();
     }
 }
