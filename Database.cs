@@ -30,9 +30,9 @@ public class Database(string connectionString)
                 Title TEXT NOT NULL,
                 CreatedAt TEXT NOT NULL,
                 Done INTEGER NOT NULL,
-                UserId INTEGER NOT NULL,
+                UserId INTEGER NOT NULL
             );
-            
+
             """;
         command.ExecuteNonQuery();
     }
