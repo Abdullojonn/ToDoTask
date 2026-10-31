@@ -13,35 +13,21 @@ public class ShowTasksCommandHandler(ITaskStorage storage, UserSession userSessi
 
         int id = userSession.CurrentUser!.Id;
 
-        List<TodoTask> task = storage.LoadTask();
+        List<TodoTask> tasks = storage.LoadTaskByUserId(id);
 
-        bool r = false;
-        foreach (var i in task)
-        {
-            if(i.UserId == id)
-            {
-                r = true;
-                break;
-            }
-        }
-
-        if (!r)
+        if (tasks.Count == 0)
         {
             System.Console.WriteLine("Задач пока нет\n");
             return;
         }
 
         System.Console.WriteLine("№  | Создана          | Задача                         | Помечена");
-        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");    
+        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");
 
-        foreach (var i in task)
+        foreach(var task in tasks)
         {
-            if(i.UserId != id)
-            {
-                continue;
-            }
-            System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm}  | {i.Title}  | {i.Done}");
+            System.Console.WriteLine($" {task.Id} | {task.CreatedAt} | {task.Title} | {task.Done}");
         }
-        System.Console.WriteLine();
+
     }
 }

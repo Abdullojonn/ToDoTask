@@ -69,7 +69,7 @@ while (true)
 
     if (commandHandlers.ContainsKey(choice))
     {
-        Console.Clear();
+        //Console.Clear();
 
         commandHandlers[choice].HandleCommand();
     }

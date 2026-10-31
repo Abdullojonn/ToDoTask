@@ -4,4 +4,5 @@ public interface IUserStorage
 {
     List<User> LoadUsers();
     void SaveUser(User user);
+    User? FindUserByName(string name);
 }

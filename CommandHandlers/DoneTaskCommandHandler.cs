@@ -20,13 +20,6 @@ public class DoneTasksCommandHandler(ITaskStorage storage, UserSession userSessi
         System.Console.Write("Введите номер задачи: ");
         string? input = Console.ReadLine();
 
-        List<TodoTask> tasks = storage.LoadTask();
-
-        if(tasks.Count <= 0){
-            System.Console.WriteLine("Список задач пуст");
-            return;
-        }
-
         var result = int.TryParse(input, out int taskId);
         if (!result)
         {

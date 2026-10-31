@@ -11,4 +11,8 @@ public interface ITaskStorage
     bool RemoveTask(int id, int userId);
 
     bool Done(int id, int userId);
+
+    bool FindTask(string title, int userId);
+
+    List<TodoTask> LoadTaskByUserId(int userId);
 }

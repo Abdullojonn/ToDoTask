@@ -15,18 +15,21 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             return;
         }
 
-        List<User> users = userStorage.LoadUsers();
-
-        foreach(var user in users)
+        User? user = userStorage.FindUserByName(name);
+        
+        if(user != null)
         {
-            if(name.ToLower() == user.Name!.ToLower())
-            {
-                System.Console.WriteLine("Пользователь с таким именем уже есть.");
-                return;
-            }
+            System.Console.WriteLine($"Пользователь {name} уже зарегистрирован.\n");
+            logger.LogInfo($"Попытка зарегистрировать уже существующего пользователя {name}");
+            return;
         }
-        User u = new User { Name = name};
-        userStorage.SaveUser(u);
+        else
+        {
+            System.Console.WriteLine($"Пользователь {name} создан.\n");
+        }
+
+        user?.Name = name;
+        userStorage.SaveUser(user!);
         
         System.Console.WriteLine($"Пользователь {name} зарегистрирован.\n");
         logger.LogInfo($"Зарегистрирован пользователь {name}");

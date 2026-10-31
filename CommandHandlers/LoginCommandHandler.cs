@@ -1,7 +1,7 @@
 using ToDoApp;
 using ToDoApp.CommandHandlers;
 
-public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger) : ICommandHandler
+public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger, Database database) : ICommandHandler
 {
     public string MenuName => "Войти";
 
@@ -11,16 +11,8 @@ public class LoginCommandHandler(IUserStorage userStorage, UserSession session, 
         string? name = Console.ReadLine();
 
         User? found = null;
-        
-        List<User> users = userStorage.LoadUsers();
 
-        foreach(var user in users){
-            if(string.Equals(user.Name, name, StringComparison.OrdinalIgnoreCase))
-            {
-                found = user;
-                break;
-            }
-        }
+        found = userStorage.FindUserByName(name!);
 
         if (found == null)
         {

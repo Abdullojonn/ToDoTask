@@ -12,8 +12,6 @@ public class SearchTasksCommandHandler(ITaskStorage storage, UserSession userSes
             return;
         }
 
-        List<TodoTask> task = storage.LoadTask();
-
         System.Console.Write("Введите слово для поиска: ");
         string? word = Console.ReadLine();
 
@@ -24,36 +22,27 @@ public class SearchTasksCommandHandler(ITaskStorage storage, UserSession userSes
         }
 
 
-        if (task.Count == 0)
+        bool found = storage.FindTask(word, userSession.CurrentUser!.Id);
+
+        if (!found)
         {
-            System.Console.WriteLine("Задач пока нет\n");
+            System.Console.WriteLine($"Задача не найдена.\n");
+            logger.LogInfo($"не нашел задачу {word}.");
             return;
         }
+
+        else
+        {
 
         System.Console.WriteLine("№  | Создана          | Задача                         | Помечена");
-        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");  
+        System.Console.WriteLine("----+------------------+---------------------------+---------------------------");    
 
-        bool r = false;
-        foreach (var i in task)
-        {
-            if (i.Title != null && userSession.CurrentUser?.Id == i.UserId)
+            List<TodoTask> tasks = storage.LoadTaskByUserId(userSession.CurrentUser!.Id);
+            foreach(var task in tasks)
             {
-                if (i.Title.ToLower().Contains(word.ToLower()))
-                {
-                    System.Console.WriteLine($"{i.Id}  | {i.CreatedAt:yyyy-MM-dd HH:mm}  | {i.Title}  | {i.Done}");
-                    r = true;
-                }
+                System.Console.WriteLine($" {task.Id} | {task.CreatedAt} | {task.Title} | {task.Done}");
             }
-
+            logger.LogInfo($"нашел задачу {word}.");
         }
-        if (!r)
-        {
-            System.Console.WriteLine("Ничего не нашлось.\n");
-            return;
-        }
-        
-        logger.LogInfo("ввывел свои задачи.");
-        System.Console.WriteLine();
-
     }
 }

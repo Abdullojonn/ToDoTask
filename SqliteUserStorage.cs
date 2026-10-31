@@ -36,4 +36,23 @@ public class SqliteUserStorage(Database database) : IUserStorage
 
         user.Id = Convert.ToInt32(command.ExecuteScalar());
     }
+
+    public User? FindUserByName(string name)
+    {
+        using var connection = database.OpenConnection();
+        using var command = connection.CreateCommand();
+
+        command.CommandText = "SELECT Id, Name FROM Users WHERE Name = $name";
+        command.Parameters.AddWithValue("$name", name);
+
+        using var reader = command.ExecuteReader();
+        if (reader.Read())
+        {
+            User user = new User();
+            user.Id = reader.GetInt32(0);
+            user.Name = reader.GetString(1);
+            return user;
+        }
+        return null;
+    }
 }
