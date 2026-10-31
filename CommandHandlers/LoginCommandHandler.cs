@@ -1,7 +1,7 @@
 using ToDoApp;
 using ToDoApp.CommandHandlers;
 
-public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger, Database database) : ICommandHandler
+public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger) : ICommandHandler
 {
     public string MenuName => "Войти";
 
