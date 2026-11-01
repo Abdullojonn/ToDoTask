@@ -28,8 +28,8 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             System.Console.WriteLine($"Пользователь {name} создан.\n");
         }
 
-        user?.Name = name;
-        userStorage.SaveUser(user!);
+        User u = new User{Name = name};
+        userStorage.SaveUser(u);
         
         System.Console.WriteLine($"Пользователь {name} зарегистрирован.\n");
         logger.LogInfo($"Зарегистрирован пользователь {name}");
