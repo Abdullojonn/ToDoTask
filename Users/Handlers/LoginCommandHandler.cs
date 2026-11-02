@@ -1,5 +1,6 @@
 using ToDoApp;
 using ToDoApp.CommandHandlers;
+using ToDoApp.Users;
 
 public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger) : ICommandHandler
 {

@@ -28,17 +28,8 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         task.CreatedAt = DateTime.Now;
         task.UserId = userSession.CurrentUser!.Id;
 
-        int cnt = 1;
-        foreach (var i in storage.LoadTaskByUserId(task.UserId))
-        {
-            i.Id = cnt++;
-        }
-        
-        //task.Id = cnt;
-
         storage.SaveTask(task);
         System.Console.WriteLine($"Задача №{task.Id} создана.\n");
-
 
         logger.LogInfo($"Создана задача {task.Id} от пользователья {userSession.CurrentUser.Name}");
     }
