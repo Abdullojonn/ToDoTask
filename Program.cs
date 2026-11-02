@@ -1,106 +1,135 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using ToDoApp;
-using ToDoApp.CommandHandlers;
+﻿using ToDoApp;
 
-// DB
-// async await
-// web -> rest api
-// docker -> postgres
-// parallel programming
+var builder = WebApplication.CreateBuilder(args);
 
-// Dependency Injection
-var services = new ServiceCollection();
+var services = builder.Services;
 
-services.AddSingleton<Logger>();
-services.AddSingleton<UserSession>();
+// Swagger
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddControllers();
 
 services.AddSingleton(new Database("Data Source=todo.db"));
+services.AddSingleton<Logger>();
 
 services.AddTransient<ITaskStorage, SQliteTasksStorage>();
 services.AddTransient<IUserStorage, SqliteUserStorage>();
 
-services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
-services.AddTransient<ICommandHandler, ShowTasksCommandHandler>();
-services.AddTransient<ICommandHandler, SearchTasksCommandHandler>();
-services.AddTransient<ICommandHandler, DeleteTasksCommandHandler>();
-services.AddTransient<ICommandHandler, DoneTasksCommandHandler>();
-services.AddTransient<ICommandHandler, MoveTaskCommandHandler>();
-services.AddTransient<ICommandHandler, StatisticsTaskCommandHandler>();
 
-services.AddTransient<ICommandHandler, RegisterUserCommandHandler>();
-services.AddTransient<ICommandHandler, LoginCommandHandler>();
-services.AddTransient<ICommandHandler, LogoutCommandHandler>();
+services.AddTransient<RegisterUserCommandHandler>();
+//services.AddTransient<ICommandHandler, LoginCommandHandler>();
+//services.AddTransient<ICommandHandler, LogoutCommandHandler>();
 
-var provider = services.BuildServiceProvider();
+var app = builder.Build();
 
-// Создать таблицы, если базы ещё нет
-provider.GetRequiredService<Database>().EnsureCreated();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-var logger = provider.GetRequiredService<Logger>();
-var session = provider.GetRequiredService<UserSession>();
+app.MapControllers();
+
+app.Run();
 
 
-var handlers =  provider.GetServices<ICommandHandler>();
+//// DB
+//// async await
+//// web -> rest api
+//// docker -> postgres
+//// parallel programming
 
-Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>();
+//// Dependency Injection
+//var services = new ServiceCollection();
 
-for (int i = 0; i < handlers.Count(); i++)
-{
-    commandHandlers.Add((i + 1).ToString(), handlers.ElementAt(i));
-}
+//services.AddSingleton<Logger>();
+//services.AddSingleton<UserSession>();
+
+//services.AddSingleton(new Database("Data Source=todo.db"));
+
+//services.AddTransient<ITaskStorage, SQliteTasksStorage>();
+//services.AddTransient<IUserStorage, SqliteUserStorage>();
+
+//services.AddTransient<ICommandHandler, CreateTaskCommandHandler>();
+//services.AddTransient<ICommandHandler, ShowTasksCommandHandler>();
+//services.AddTransient<ICommandHandler, SearchTasksCommandHandler>();
+//services.AddTransient<ICommandHandler, DeleteTasksCommandHandler>();
+//services.AddTransient<ICommandHandler, DoneTasksCommandHandler>();
+//services.AddTransient<ICommandHandler, MoveTaskCommandHandler>();
+//services.AddTransient<ICommandHandler, StatisticsTaskCommandHandler>();
+
+//services.AddTransient<ICommandHandler, RegisterUserCommandHandler>();
+//services.AddTransient<ICommandHandler, LoginCommandHandler>();
+//services.AddTransient<ICommandHandler, LogoutCommandHandler>();
+
+//var provider = services.BuildServiceProvider();
+
+//// Создать таблицы, если базы ещё нет
+//provider.GetRequiredService<Database>().EnsureCreated();
+
+//var logger = provider.GetRequiredService<Logger>();
+//var session = provider.GetRequiredService<UserSession>();
 
 
-while (true)
-{
+//var handlers =  provider.GetServices<ICommandHandler>();
 
-    ShowMenu(session, commandHandlers);
-    string? choice = Console.ReadLine();
+//Dictionary<string, ICommandHandler> commandHandlers = new Dictionary<string, ICommandHandler>();
 
- // в зависимости от choice вызвать CreateTask(), ShowTasks() или выйти
+//for (int i = 0; i < handlers.Count(); i++)
+//{
+//    commandHandlers.Add((i + 1).ToString(), handlers.ElementAt(i));
+//}
 
-    if(choice == "0")
-    {
-        break;
-    }
-    if (string.IsNullOrEmpty(choice))
-    {
-        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
-        break;
-    }
 
-    if (commandHandlers.ContainsKey(choice))
-    {
-        Console.Clear();
+//while (true)
+//{
 
-        commandHandlers[choice].HandleCommand();
-    }
-    else
-    {
-        System.Console.WriteLine("Неизвестный пункт меню. Попробуйте ещё раз.\n");
-    }
-}
+//    ShowMenu(session, commandHandlers);
+//    string? choice = Console.ReadLine();
 
-logger.Close();
+// // в зависимости от choice вызвать CreateTask(), ShowTasks() или выйти
 
-// здесь методы ShowMenu, CreateTask, ShowTasks, LoadTasks, ...
-static void ShowMenu(UserSession session, Dictionary<string, ICommandHandler> commandHandlers)
-{
-    System.Console.WriteLine("===== Список задач =====");
-    if (session.IsLoggedIn())
-    {
-        System.Console.WriteLine($"Пользователь: {session.CurrentUser!.Name}");
-    }
-    else
-    {
-        System.Console.WriteLine("Вы не вошли.");
-    }
+//    if(choice == "0")
+//    {
+//        break;
+//    }
+//    if (string.IsNullOrEmpty(choice))
+//    {
+//        System.Console.WriteLine("Пункт меню не выбран. Попробуйте ещё раз.\n");
+//        break;
+//    }
 
-    foreach (var key in commandHandlers.Keys)
-    {
-        var handler = commandHandlers[key];
-        System.Console.WriteLine($"{key}. {handler.MenuName}");
-    }
+//    if (commandHandlers.ContainsKey(choice))
+//    {
+//        Console.Clear();
 
-    System.Console.WriteLine("0. Закрыть");
-    System.Console.Write("Выберите пункт: ");
-}
+//        commandHandlers[choice].HandleCommand();
+//    }
+//    else
+//    {
+//        System.Console.WriteLine("Неизвестный пункт меню. Попробуйте ещё раз.\n");
+//    }
+//}
+
+//logger.Close();
+
+//// здесь методы ShowMenu, CreateTask, ShowTasks, LoadTasks, ...
+//static void ShowMenu(UserSession session, Dictionary<string, ICommandHandler> commandHandlers)
+//{
+//    System.Console.WriteLine("===== Список задач =====");
+//    if (session.IsLoggedIn())
+//    {
+//        System.Console.WriteLine($"Пользователь: {session.CurrentUser!.Name}");
+//    }
+//    else
+//    {
+//        System.Console.WriteLine("Вы не вошли.");
+//    }
+
+//    foreach (var key in commandHandlers.Keys)
+//    {
+//        var handler = commandHandlers[key];
+//        System.Console.WriteLine($"{key}. {handler.MenuName}");
+//    }
+
+//    System.Console.WriteLine("0. Закрыть");
+//    System.Console.Write("Выберите пункт: ");
+//}
