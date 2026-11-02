@@ -1,6 +1,6 @@
 ﻿namespace ToDoApp.CommandHandlers;
 
-public class ShowTasksCommandHandler(ITaskStorage storage, UserSession userSession) : ICommandHandler
+public class ShowTasksCommandHandler(ITaskStorage storage, UserSession userSession, Logger logger) : ICommandHandler
 {
     public string MenuName => "Показать задачи";
     public void HandleCommand()
@@ -29,5 +29,6 @@ public class ShowTasksCommandHandler(ITaskStorage storage, UserSession userSessi
             System.Console.WriteLine($" {task.Id} | {task.CreatedAt} | {task.Title} | {task.Done}");
         }
 
+        logger.LogInfo($"Пользователь {userSession.CurrentUser.Name} просмотрел список задач");
     }
 }

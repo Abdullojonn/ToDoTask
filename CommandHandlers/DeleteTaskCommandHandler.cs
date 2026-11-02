@@ -43,6 +43,6 @@ public class DeleteTasksCommandHandler(ITaskStorage storage, UserSession userSes
         System.Console.WriteLine("Задача Успешно Удалено!\n");
 
 
-        logger.LogInfo("Удалена задача");
+        logger.LogInfo($"Пользователь {userSession.CurrentUser.Name} удалил задачу");
     }
 }

@@ -25,6 +25,7 @@ services.AddTransient<ICommandHandler, SearchTasksCommandHandler>();
 services.AddTransient<ICommandHandler, DeleteTasksCommandHandler>();
 services.AddTransient<ICommandHandler, DoneTasksCommandHandler>();
 services.AddTransient<ICommandHandler, MoveTaskCommandHandler>();
+services.AddTransient<ICommandHandler, StatisticsTaskCommandHandler>();
 
 services.AddTransient<ICommandHandler, RegisterUserCommandHandler>();
 services.AddTransient<ICommandHandler, LoginCommandHandler>();
@@ -69,7 +70,7 @@ while (true)
 
     if (commandHandlers.ContainsKey(choice))
     {
-        //Console.Clear();
+        Console.Clear();
 
         commandHandlers[choice].HandleCommand();
     }

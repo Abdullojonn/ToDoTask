@@ -4,7 +4,7 @@ using ToDoApp.CommandHandlers;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 
-public class MoveTaskCommandHandler(ITaskStorage storage, UserSession userSession, Logger logger) : ICommandHandler
+public class MoveTaskCommandHandler(UserSession userSession, Logger logger) : ICommandHandler
 {
     public string MenuName => "Пердать задачу";
 

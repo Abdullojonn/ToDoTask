@@ -29,14 +29,12 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         task.UserId = userSession.CurrentUser!.Id;
 
         int cnt = 1;
-        foreach(var i in storage.LoadTask())
+        foreach (var i in storage.LoadTaskByUserId(task.UserId))
         {
-            if(i.UserId == task.UserId)
-            {
-                cnt ++;
-            }
+            i.Id = cnt++;
         }
-        task.Id = cnt;
+        
+        //task.Id = cnt;
 
         storage.SaveTask(task);
         System.Console.WriteLine($"Задача №{task.Id} создана.\n");
