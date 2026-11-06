@@ -4,25 +4,7 @@ namespace ToDoApp.Users;
 
 [ApiController]
 [Route("api/users")]
-public class UsersController(RegisterUserCommandHandler registerUserCommandHandler) : ControllerBase
+public class UserController(RegisterUserCommand registerUserCommand) : ControllerBase
 {
-    [HttpPost("register")]
-    public IActionResult Register([FromBody] RegisterUserCommand command)
-    {
-        try
-        {
-            registerUserCommandHandler.HandleCommand(command);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(ex.Message);
-        }
-        catch
-        {
-            throw; // 500
-        }
-
-        return Ok();
-    }
+    
 }
-

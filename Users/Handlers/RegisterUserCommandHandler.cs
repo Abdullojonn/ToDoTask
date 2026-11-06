@@ -1,29 +1,32 @@
-using ToDoApp.Users;
-
-public record RegisterUserCommand(string Name);
+namespace ToDoApp.Users;
 
 public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
 {
-    public void HandleCommand(RegisterUserCommand command)
+    public UserResponse HandleCommand(RegisterUserCommand command)
     {
-        string name = command.Name;
-        if (name == "" || name == null || name.Contains(",") || name.Contains(".") || name.Contains("!"))
+        string? name = command.Name?.Trim();
+
+        if (string.IsNullOrEmpty(name) || name.Length > 100)
         {
-            throw new ArgumentException("Имя не может быть пустым и не должно содержать запрещенные символы.");
+            throw new ArgumentException("Имя должно содержать от 1 до 100 символов");
         }
 
-        User? user = userStorage.FindUserByName(name);
-
-        if (user != null)
+        foreach(var u in userStorage.LoadUsers())
         {
-            logger.LogInfo($"Попытка зарегистрировать уже существующего пользователя {name}");
-            throw new ArgumentException("Имя уже используется.");
+            if(string.Equals(u.Name, name, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("Имя уже используется.");
+            }
         }
 
-        User u = new User { Name = name };
+        User user = new User{Name = name};
 
-        userStorage.SaveUser(u);
+        userStorage.SaveUser(user);
+        logger.LogInfo($"Зарегистрировалься пользователь {name}");
 
-        logger.LogInfo($"Зарегистрирован пользователь {name}");
+        return new UserResponse{
+            Id = user.Id,
+            Name = user.Name
+        };
     }
 }
