@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Runtime.CompilerServices;
 using ToDoApp;
-
+namespace ToDoApp;
 
 public class SQliteTasksStorage(Database database) : ITaskStorage
 {

@@ -20,11 +20,18 @@ services.AddTransient<IUserStorage, SqliteUserStorage>();
 
 
 services.AddTransient<RegisterUserCommandHandler>();
+services.AddTransient<CreateTaskCommandHandler>();
+services.AddTransient<GetTasksCommandHandler>();
+services.AddTransient<DeleteTaskCommandHandler>();
+services.AddTransient<DoneTaskCommandHandler>();
+services.AddTransient<LoginUserCommandHandler>();
+
+services.AddSingleton<UserSession>();
 //services.AddTransient<ICommandHandler, LoginCommandHandler>();
 //services.AddTransient<ICommandHandler, LogoutCommandHandler>();
 
 var app = builder.Build();
-
+app.Services.GetRequiredService<Database>().EnsureCreated();
 app.UseSwagger();
 app.UseSwaggerUI();
 

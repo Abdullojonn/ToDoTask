@@ -1,29 +1,30 @@
-using ToDoApp;
-using ToDoApp.CommandHandlers;
-using ToDoApp.Users;
+namespace ToDoApp.Users;
 
-public class LoginCommandHandler(IUserStorage userStorage, UserSession session, Logger logger) : ICommandHandler
+public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger, UserSession userSession)
 {
-    public string MenuName => "Войти";
-
-    public void HandleCommand()
+    public UserResponse HandleCommand(LoginCommand command)
     {
-        System.Console.Write("Введите Имя: ");
-        string? name = Console.ReadLine();
+        string? name = command.Name?.Trim();
 
-        User? found = null;
+        if (string.IsNullOrEmpty(name) || name.Length > 100)
+        {
+            throw new ArgumentException("Имя должно содержать от 1 до 100 символов");
+        }
 
-        found = userStorage.FindUserByName(name!);
+        User? found = userStorage.FindUserByName(name);
 
         if (found == null)
         {
-            Console.WriteLine("Пользователь не найден.");
-            logger.LogWarning($"Неудачная Попытка входа: {name}");
-            return;
+            throw new ArgumentException("Такого имени нет");
         }
 
-        session.CurrentUser = found;
-        Console.WriteLine($"Добро пожаловать, {found.Name}!");
-        logger.LogInfo($"{found.Name} вошёл в систему");
+        userSession.CurrentUser = found;
+        logger.LogInfo($"Зашёл пользователь {userSession.CurrentUser.Name}");
+        
+        return new UserResponse
+        {
+            Id = found.Id,
+            Name = found.Name!  
+        };
     }
 }

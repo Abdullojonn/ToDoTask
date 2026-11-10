@@ -1,4 +1,5 @@
 using ToDoApp.CommandHandlers;
+namespace ToDoApp;
 
 public class LogoutCommandHandler(UserSession userSession, Logger logger) : ICommandHandler
 {

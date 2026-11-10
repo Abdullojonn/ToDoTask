@@ -5,7 +5,6 @@ using System.Globalization;
 
 public class DeleteTasksCommandHandler(ITaskStorage storage, UserSession userSession, Logger logger): ICommandHandler
 {
-
     public string MenuName => "Удалить задачу";
 
     public void HandleCommand()

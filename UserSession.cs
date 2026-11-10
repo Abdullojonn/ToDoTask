@@ -1,9 +1,14 @@
 
 using ToDoApp.Users;
+namespace ToDoApp;
 
 public class UserSession
 {
-    public User? CurrentUser;   // null — никто не вошёл
+    public User? CurrentUser = new User
+    {
+        Id = 1,
+        Name = ""
+    };
 
     public bool IsLoggedIn()
     {
