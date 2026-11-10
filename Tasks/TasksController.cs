@@ -4,7 +4,7 @@ namespace ToDoApp.Users;
 
 [ApiController]
 [Route("api/tasks")]
-public class TasksController(CreateTaskCommandHandler createTaskCommandHandler, GetTasksCommandHandler getTasksCommandHandler, DeleteTaskCommandHandler deleteTaskCommandHandler, DoneTaskCommandHandler doneTaskCommandHandler): ControllerBase
+public class TasksController(CreateTaskCommandHandler createTaskCommandHandler, GetTasksCommandHandler getTasksCommandHandler, DeleteTaskCommandHandler deleteTaskCommandHandler, DoneTaskCommandHandler doneTaskCommandHandler, SearchTasksCommandHandler searchTasksCommandHandler): ControllerBase
 {
     [HttpPost("create")]
     public ActionResult<TaskResponse> Create([FromBody] CreateTaskCommand command)
@@ -77,6 +77,25 @@ public class TasksController(CreateTaskCommandHandler createTaskCommandHandler, 
             }
             
             return Ok();
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Conflict(new { error = exception.Message });
+        }
+    }
+
+    [HttpGet("search")]
+    public ActionResult Search(string title)
+    {
+        try
+        {
+            var found = searchTasksCommandHandler.HandleCommand(title);
+
+            return Ok(found);
         }
         catch (ArgumentException exception)
         {

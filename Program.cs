@@ -25,6 +25,7 @@ services.AddTransient<GetTasksCommandHandler>();
 services.AddTransient<DeleteTaskCommandHandler>();
 services.AddTransient<DoneTaskCommandHandler>();
 services.AddTransient<LoginUserCommandHandler>();
+services.AddTransient<SearchTasksCommandHandler>();
 
 services.AddSingleton<UserSession>();
 //services.AddTransient<ICommandHandler, LoginCommandHandler>();

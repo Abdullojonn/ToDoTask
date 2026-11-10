@@ -12,7 +12,7 @@ public interface ITaskStorage
 
     bool Done(int id, int userId);
 
-    bool FindTask(string title, int userId);
+    List<TodoTask> FindTask(string title, int userId);
 
     List<TodoTask> LoadTaskByUserId(int userId);
 }

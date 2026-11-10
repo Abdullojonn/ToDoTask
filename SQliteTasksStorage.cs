@@ -71,17 +71,30 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         return command.ExecuteNonQuery() > 0;
     }
 
-    public bool FindTask(string title, int userId)
+    public List<TodoTask> FindTask(string title, int userId)
     {
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "SELECT * FROM Tasks WHERE Title = $title AND UserId = $userId";
+        command.CommandText = "SELECT * FROM Tasks WHERE Title LIKE $title AND UserId = $userId";
 
-        command.Parameters.AddWithValue("$title", title);
+        command.Parameters.AddWithValue("$title", $"%{title}%");
         command.Parameters.AddWithValue("$userId", userId);
 
-        return command.ExecuteNonQuery() > 0;
+        using var reader = command.ExecuteReader();
+        List<TodoTask> tasks = new List<TodoTask>();
+        while (reader.Read())
+        {
+            TodoTask task = new TodoTask();
+            task.Id = reader.GetInt32(0);
+            task.Title = reader.GetString(1);
+            task.CreatedAt = DateTime.Parse(reader.GetString(2));
+            task.Done = reader.GetInt32(3) == 1;
+            task.UserId = reader.GetInt32(4);
+            tasks.Add(task);
+        }
+
+        return tasks;
     }
 
     public List<TodoTask> LoadTaskByUserId(int userId)
