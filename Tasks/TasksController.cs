@@ -1,10 +1,17 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ToDoApp.Users;
 
 [ApiController]
+[Authorize]
 [Route("api/tasks")]
-public class TasksController(CreateTaskCommandHandler createTaskCommandHandler, GetTasksCommandHandler getTasksCommandHandler, DeleteTaskCommandHandler deleteTaskCommandHandler, DoneTaskCommandHandler doneTaskCommandHandler, SearchTasksCommandHandler searchTasksCommandHandler): ControllerBase
+public class TasksController(
+    CreateTaskCommandHandler createTaskCommandHandler,
+    GetTasksCommandHandler getTasksCommandHandler,
+    DeleteTaskCommandHandler deleteTaskCommandHandler,
+    DoneTaskCommandHandler doneTaskCommandHandler,
+    SearchTasksCommandHandler searchTasksCommandHandler) : ControllerBase
 {
     [HttpPost("create")]
     public ActionResult<TaskResponse> Create([FromBody] CreateTaskCommand command)
