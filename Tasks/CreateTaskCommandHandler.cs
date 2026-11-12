@@ -6,6 +6,10 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
 {
     public TaskResponse HandleCommand(CreateTaskCommand createTaAskCommand)
     {
+
+        //if(!userSession.IsLoggedIn())
+        
+
         string title = createTaAskCommand.Title.Trim();
 
         if(string.IsNullOrWhiteSpace(title) || title.Length > 200)

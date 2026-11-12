@@ -17,14 +17,14 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
         {
             throw new ArgumentException("Пароль должно содержать от 1 до 50 символов");
         }
+        
+        var found = userStorage.FindUserByName(name);
 
-        foreach(var u in userStorage.LoadUsers())
+        if (found != null)
         {
-            if(string.Equals(u.Name, name, StringComparison.OrdinalIgnoreCase))
-            {
-                throw new InvalidOperationException("Имя уже используется.");
-            }
+            throw new ArgumentException("Имя уже используется.");
         }
+
 
         User user = new User{
             Name = name,
