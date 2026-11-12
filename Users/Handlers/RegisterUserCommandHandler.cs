@@ -1,8 +1,10 @@
+using ToDoApp.Users.Handlers;
+
 namespace ToDoApp.Users;
 
 public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
 {
-    public UserResponse HandleCommand(RegisterUserCommand command)
+    public RegisterResponse HandleCommand(RegisterUserCommand command)
     {
         string? name = command.Name?.Trim();
 
@@ -34,7 +36,8 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
         userStorage.SaveUser(user);
         logger.LogInfo($"Зарегистрировалься пользователь {name}");
 
-        return new UserResponse{
+        return new RegisterResponse
+        {
             Id = user.Id,
             Name = user.Name
         };

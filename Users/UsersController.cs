@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Users.Handlers;
 
 namespace ToDoApp.Users;
 
@@ -8,7 +9,7 @@ public class UsersController(RegisterUserCommandHandler registerUserCommandHandl
 : ControllerBase
 {
     [HttpPost("register")]
-    public ActionResult<UserResponse> Register([FromBody] RegisterUserCommand command)
+    public ActionResult<LoginResponse> Register([FromBody] RegisterUserCommand command)
     {
         try
         {
@@ -26,7 +27,7 @@ public class UsersController(RegisterUserCommandHandler registerUserCommandHandl
     }
 
     [HttpPost("login")]
-    public ActionResult<UserResponse> Login([FromBody] LoginCommand command)
+    public ActionResult<LoginResponse> Login([FromBody] LoginCommand command)
     {
         try
         {

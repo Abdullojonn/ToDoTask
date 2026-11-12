@@ -1,8 +1,14 @@
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using ToDoApp.Users.Handlers;
+
 namespace ToDoApp.Users;
 
-public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger, UserSession userSession)
+public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger)
 {
-    public UserResponse HandleCommand(LoginCommand command)
+    public LoginResponse HandleCommand(LoginCommand command)
     {
         string? name = command.Name?.Trim();
 
@@ -23,13 +29,34 @@ public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger, Us
             throw new ArgumentException("Пароль неверный.");
         }
 
-        userSession.CurrentUser = found;
-        logger.LogInfo($"Зашёл пользователь {userSession.CurrentUser.Name}");
+        logger.LogInfo($"Зашёл пользователь {found.Name}");
         
-        return new UserResponse
+        var token = GenerateToken(found);
+
+        return new LoginResponse
         {
-            Id = found.Id,
-            Name = found.Name!  
+            Token = token
         };
+    }
+
+    private string GenerateToken(User user)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthConstants.Secret));
+        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new[]
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Name!)
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: AuthConstants.Issuer,
+            audience: AuthConstants.Audience,
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(AuthConstants.ExpirationMinutes),
+            signingCredentials: credentials);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }
