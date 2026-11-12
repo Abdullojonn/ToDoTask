@@ -1,4 +1,3 @@
-using ToDoApp.CommandHandlers;
 using ToDoApp.Users;
 
 namespace ToDoApp;

@@ -18,6 +18,11 @@ public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger, Us
             throw new ArgumentException("Такого имени нет");
         }
 
+        if(command.Password != found.Password)
+        {
+            throw new ArgumentException("Пароль неверный.");
+        }
+
         userSession.CurrentUser = found;
         logger.LogInfo($"Зашёл пользователь {userSession.CurrentUser.Name}");
         

@@ -32,8 +32,9 @@ public class SqliteUserStorage(Database database) : IUserStorage
 
         // Id не передаём: база назначит его сама и вернёт через RETURNING.
         // Имя передаём ПАРАМЕТРОМ ($name), а не вклеиваем в строку — так нельзя сделать SQL-инъекцию.
-        command.CommandText = "INSERT INTO Users (Name) VALUES ($name) RETURNING Id";
+        command.CommandText = "INSERT INTO Users (Name, Password) VALUES ($name, $password) RETURNING Id";
         command.Parameters.AddWithValue("$name", user.Name);
+        command.Parameters.AddWithValue("$password", user.Password);
 
         user.Id = Convert.ToInt32(command.ExecuteScalar());
     }
@@ -43,7 +44,7 @@ public class SqliteUserStorage(Database database) : IUserStorage
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "SELECT Id, Name FROM Users WHERE Name = $name";
+        command.CommandText = "SELECT Id, Name, Password FROM Users WHERE Name = $name";
         command.Parameters.AddWithValue("$name", name);
 
         using var reader = command.ExecuteReader();
@@ -52,6 +53,7 @@ public class SqliteUserStorage(Database database) : IUserStorage
             User user = new User();
             user.Id = reader.GetInt32(0);
             user.Name = reader.GetString(1);
+            user.Password = reader.GetString(2);
             return user;
         }
         return null;

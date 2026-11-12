@@ -11,6 +11,13 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             throw new ArgumentException("Имя должно содержать от 1 до 100 символов");
         }
 
+        string? password = command.Password;
+
+        if(string.IsNullOrWhiteSpace(password) || password.Length > 50)
+        {
+            throw new ArgumentException("Пароль должно содержать от 1 до 50 символов");
+        }
+
         foreach(var u in userStorage.LoadUsers())
         {
             if(string.Equals(u.Name, name, StringComparison.OrdinalIgnoreCase))
@@ -19,7 +26,10 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             }
         }
 
-        User user = new User{Name = name};
+        User user = new User{
+            Name = name,
+            Password = password
+        };
 
         userStorage.SaveUser(user);
         logger.LogInfo($"Зарегистрировалься пользователь {name}");

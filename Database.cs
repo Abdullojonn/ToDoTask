@@ -22,7 +22,8 @@ public class Database(string connectionString)
         command.CommandText = """
             CREATE TABLE IF NOT EXISTS Users (
                 Id   INTEGER PRIMARY KEY,
-                Name TEXT    NOT NULL UNIQUE
+                Name TEXT NOT NULL UNIQUE,
+                Password TEXT NOT NULL
             );
 
             CREATE TABLE IF NOT EXISTS Tasks(

@@ -1,10 +1,6 @@
-using ToDoApp.CommandHandlers;
 namespace ToDoApp;
-
-public class LogoutCommandHandler(UserSession userSession, Logger logger) : ICommandHandler
+public class LogoutCommandHandler(UserSession userSession, Logger logger)
 {
-
-    public string MenuName => "Выйти";
     public void HandleCommand()
     {
         if (!userSession.IsLoggedIn())
