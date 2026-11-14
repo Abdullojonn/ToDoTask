@@ -5,4 +5,5 @@ namespace ToDoApp.Users;
 public class CreateTaskCommand()
 {
     public string Title {get; set;} = string.Empty;
+    public DateTime DeadLine {get; set;}
 }

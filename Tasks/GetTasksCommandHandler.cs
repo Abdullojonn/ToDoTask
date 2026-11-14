@@ -19,6 +19,7 @@ public class GetTasksCommandHandler(ITaskStorage taskStorage, UserSession userSe
             task.Title = i.Title;
             task.Done = i.Done;
             task.CreatedAt = i.CreatedAt;
+            task.DeadLine = i.DeadLine;
 
             taskResponses.Add(task);
         }

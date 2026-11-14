@@ -11,7 +11,8 @@ public class TasksController(
     GetTasksCommandHandler getTasksCommandHandler,
     DeleteTaskCommandHandler deleteTaskCommandHandler,
     DoneTaskCommandHandler doneTaskCommandHandler,
-    SearchTasksCommandHandler searchTasksCommandHandler) : ControllerBase
+    SearchTasksCommandHandler searchTasksCommandHandler,
+    SearchOverdueTasksCommandHandler searchOverdueTasksCommandHandler) : ControllerBase
 {
     [HttpPost("create")]
     public ActionResult<TaskResponse> Create([FromBody] CreateTaskCommand command)
@@ -101,6 +102,25 @@ public class TasksController(
         try
         {
             var found = searchTasksCommandHandler.HandleCommand(title);
+
+            return Ok(found);
+        }
+        catch (ArgumentException exception)
+        {
+            return BadRequest(new { error = exception.Message });
+        }
+        catch (InvalidOperationException exception)
+        {
+            return Conflict(new { error = exception.Message });
+        }
+    }
+
+    [HttpGet("overdue")]
+    public ActionResult Overdue()
+    {
+        try
+        {
+            var found = searchOverdueTasksCommandHandler.HandleCommand(DateTime.Now);
 
             return Ok(found);
         }

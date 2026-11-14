@@ -15,4 +15,6 @@ public interface ITaskStorage
     List<TodoTask> FindTask(string title, int userId);
 
     List<TodoTask> LoadTaskByUserId(int userId);
+
+    List<TodoTask> SearchByDeadLine(int userId, DateTime now);
 }

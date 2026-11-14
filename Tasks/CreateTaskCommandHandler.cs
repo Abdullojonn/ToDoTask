@@ -21,6 +21,16 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         task.Title = title;
         task.CreatedAt = DateTime.Now;
         task.UserId = userSession.CurrentUser!.Id;
+        
+
+        DateTime deadline = createTaAskCommand.DeadLine;
+
+        if(deadline < DateTime.Now)
+        {
+            throw new ArgumentException("Дедлайн не может быть в прошлом");
+        }
+
+        task.DeadLine = deadline;
 
         storage.SaveTask(task);
         logger.LogInfo($"Создана задача {task.Id} от пользователья {userSession.CurrentUser.Name}");

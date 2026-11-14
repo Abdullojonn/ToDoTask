@@ -18,6 +18,7 @@ public class SearchTasksCommandHandler(ITaskStorage taskStorage, UserSession use
             task.Title = i.Title;
             task.Done = i.Done;
             task.CreatedAt = i.CreatedAt;
+            task.DeadLine = i.DeadLine;
 
             taskResponses.Add(task);
         }
