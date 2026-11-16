@@ -1,4 +1,4 @@
-﻿namespace ToDoApp;
+﻿namespace ToDoApp.Tasks;
 
 public class TodoTask
 {

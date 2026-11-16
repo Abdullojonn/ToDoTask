@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Tasks.Handlers;
 
-namespace ToDoApp.Users;
+namespace ToDoApp.Tasks;
 
 [ApiController]
 [Authorize]

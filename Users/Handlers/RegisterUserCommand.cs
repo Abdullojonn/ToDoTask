@@ -1,4 +1,4 @@
-namespace ToDoApp.Users;
+namespace ToDoApp.Users.Handlers;
 
 public class RegisterUserCommand
 {

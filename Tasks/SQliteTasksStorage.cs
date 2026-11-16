@@ -1,10 +1,32 @@
 ﻿using System.Data;
 using System.Runtime.CompilerServices;
-using ToDoApp;
-namespace ToDoApp;
+namespace ToDoApp.Tasks;
 
 public class SQliteTasksStorage(Database database) : ITaskStorage
 {
+    public TodoTask? GetById(int id)
+    {
+        using var connection = database.OpenConnection();
+        using var command = connection.CreateCommand();
+        command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId, DeadLine FROM Tasks WHERE Id = $id";
+        command.Parameters.AddWithValue("$id", id);
+
+        using var reader = command.ExecuteReader();
+                if (reader.Read())
+        {
+            TodoTask task = new TodoTask();
+            task.Id = reader.GetInt32(0);
+            task.Title = reader.GetString(1);
+            task.CreatedAt = DateTime.Parse(reader.GetString(2));
+            task.Done = reader.GetInt32(3) == 1;
+            task.UserId = reader.GetInt32(4);
+            task.DeadLine = DateTime.Parse(reader.GetString(5));
+            return task;
+        }
+
+        return null;
+    }
+
     public List<TodoTask> LoadTask()
     {
         List<TodoTask> tasks = new List<TodoTask>();
@@ -47,28 +69,24 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         task.Id = Convert.ToInt32(command.ExecuteScalar());
     }
 
-    public bool RemoveTask(int id, int userId)
+    public bool RemoveTask(int id)
     {
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "DELETE FROM Tasks Where Id = $id AND UserId = $userId";
-        
+        command.CommandText = "DELETE FROM Tasks Where Id = $id";
         command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$userId", userId);
 
         return command.ExecuteNonQuery() > 0;
     }
 
-    public bool Done(int id, int userId)
+    public bool Done(int id)
     {
         using var connection = database.OpenConnection();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "UPDATE Tasks SET DONE = 1 Where Id = $id AND UserId = $userId";
-
+        command.CommandText = "UPDATE Tasks SET DONE = 1 Where Id = $id";
         command.Parameters.AddWithValue("$id", id);
-        command.Parameters.AddWithValue("$userId", userId);
 
         return command.ExecuteNonQuery() > 0;
     }
@@ -153,5 +171,6 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
 
         return tasks;
     }
+
 
 }

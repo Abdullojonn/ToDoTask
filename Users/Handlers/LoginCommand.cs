@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ToDoApp.Users;
+namespace ToDoApp.Users.Handlers;
 
 public class LoginCommand()
 {

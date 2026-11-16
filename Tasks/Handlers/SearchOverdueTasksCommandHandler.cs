@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Users.IdAcess;
 
-namespace ToDoApp.Users;
+namespace ToDoApp.Tasks.Handlers;
 
-public class SearchOverdueTasksCommandHandler(ITaskStorage taskStorage, UserSession userSession)
+public class SearchOverdueTasksCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext)
 {
     public List<TaskResponse> HandleCommand(DateTime now)
     {
         
-        var found = taskStorage.SearchByDeadLine(userSession.CurrentUser!.Id, now);
+        var found = taskStorage.SearchByDeadLine(userContext.GetRequiredUserId(), now);
         
         List<TaskResponse> taskResponses = new List<TaskResponse>();
 

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ToDoApp.Users;
+namespace ToDoApp.Tasks.Handlers;
 
 public class CreateTaskCommand()
 {

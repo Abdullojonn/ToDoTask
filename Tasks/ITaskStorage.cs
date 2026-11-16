@@ -1,16 +1,18 @@
 ﻿using System.Reflection.Metadata;
 
-namespace ToDoApp;
+namespace ToDoApp.Tasks;
 
 public interface ITaskStorage
 {
+    TodoTask? GetById(int id);
+
     List<TodoTask> LoadTask();
 
     void SaveTask(TodoTask task);
 
-    bool RemoveTask(int id, int userId);
+    bool RemoveTask(int id);
 
-    bool Done(int id, int userId);
+    bool Done(int id);
 
     List<TodoTask> FindTask(string title, int userId);
 

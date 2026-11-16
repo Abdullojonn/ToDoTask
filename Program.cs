@@ -3,7 +3,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.Text;
 using ToDoApp;
-using ToDoApp.Users;
+using ToDoApp.Tasks;
+using ToDoApp.Tasks.Handlers;
+using ToDoApp.Users.Handlers;
+using ToDoApp.Users.IdAcess;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +53,6 @@ services.AddSingleton<Logger>();
 services.AddTransient<ITaskStorage, SQliteTasksStorage>();
 services.AddTransient<IUserStorage, SqliteUserStorage>();
 
-
 services.AddTransient<RegisterUserCommandHandler>();
 services.AddTransient<CreateTaskCommandHandler>();
 services.AddTransient<GetTasksCommandHandler>();
@@ -60,8 +62,9 @@ services.AddTransient<LoginUserCommandHandler>();
 services.AddTransient<SearchTasksCommandHandler>();
 services.AddTransient<SearchOverdueTasksCommandHandler>();
 
-services.AddSingleton<UserSession>();
-
+// Scoped!
+services.AddHttpContextAccessor();
+services.AddScoped<ICurrentUserContext, CurrentUserContext>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
