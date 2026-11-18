@@ -2,9 +2,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ToDoApp.Users.Handlers;
 
-namespace ToDoApp.Users;
+namespace ToDoApp.Users.Handlers;
 
 public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger)
 {

@@ -1,6 +1,4 @@
-using ToDoApp.Users.Handlers;
-
-namespace ToDoApp.Users;
+namespace ToDoApp.Users.Handlers;
 
 public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
 {

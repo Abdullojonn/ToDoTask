@@ -1,18 +1,18 @@
-using ToDoApp.Users;
+﻿using Microsoft.AspNetCore.Mvc;
+using ToDoApp.Users.IdAcess;
 
-namespace ToDoApp;
+namespace ToDoApp.Tasks.Handlers;
 
-public class GetTasksCommandHandler(ITaskStorage taskStorage, UserSession userSession)
+public class SearchTasksCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext)
 {
-    public List<TaskResponse> Get()
+    public List<TaskResponse> HandleCommand(string title)
     {
-        int id = userSession.CurrentUser!.Id;
-
-        List<TodoTask> tasks = taskStorage.LoadTaskByUserId(id);
-
+        
+        var found = taskStorage.FindTask(title, userContext.GetRequiredUserId());
+        
         List<TaskResponse> taskResponses = new List<TaskResponse>();
 
-        foreach(var i in tasks)
+        foreach(var i in found)
         {
             TaskResponse task = new TaskResponse();
             task.Id = i.Id;

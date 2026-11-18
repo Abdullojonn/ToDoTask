@@ -1,15 +1,11 @@
-﻿using ToDoApp.Users;
+﻿using ToDoApp.Users.IdAcess;
 
-namespace ToDoApp;
+namespace ToDoApp.Tasks.Handlers;
 
-public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserSession userSession)
+public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, ICurrentUserContext userContext)
 {
     public TaskResponse HandleCommand(CreateTaskCommand createTaAskCommand)
     {
-
-        //if(!userSession.IsLoggedIn())
-        
-
         string title = createTaAskCommand.Title.Trim();
 
         if(string.IsNullOrWhiteSpace(title) || title.Length > 200)
@@ -20,8 +16,7 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         TodoTask task = new TodoTask();
         task.Title = title;
         task.CreatedAt = DateTime.Now;
-        task.UserId = userSession.CurrentUser!.Id;
-        
+        task.UserId = userContext.GetRequiredUserId();
 
         DateTime deadline = createTaAskCommand.DeadLine;
 
@@ -33,7 +28,7 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, UserS
         task.DeadLine = deadline;
 
         storage.SaveTask(task);
-        logger.LogInfo($"Создана задача {task.Id} от пользователья {userSession.CurrentUser.Name}");
+        logger.LogInfo($"Создана задача {task.Id} от пользователья {userContext.GetRequiredUserId()}");
 
         return new TaskResponse
         {
