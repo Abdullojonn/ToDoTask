@@ -8,14 +8,10 @@ public class GetTasksCommandHandler(ITaskStorage taskStorage, ICurrentUserContex
     {
         List<TodoTask> tasks = taskStorage.LoadTaskByUserId(userContext.GetRequiredUserId());
 
-        var taskResponses = tasks
-            .Select(task => task.MapToResponse())
-            .ToList();
-
-        var taskResponses2 = tasks
+        var responses = tasks
             .Select(task => TaskMapping.MapToResponse(task))
             .ToList();
 
-        return taskResponses;
+        return responses;
     }
 }
