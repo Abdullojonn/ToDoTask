@@ -4,9 +4,9 @@ namespace ToDoApp.Tasks;
 
 public interface ITaskStorage
 {
-    TodoTask? GetById(int id);
+    Task<TodoTask?> GetById(int id);
 
-    List<TodoTask> LoadTask();
+    Task<List<TodoTask>> LoadTask();
 
     void SaveTask(TodoTask task);
 

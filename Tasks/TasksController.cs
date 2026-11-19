@@ -52,11 +52,11 @@ public class TasksController(
     }
 
     [HttpDelete("delete/{id}")]
-    public ActionResult Delete(int id)
+    public async Task<ActionResult> Delete(int id)
     {
         try
         {
-            bool delete = deleteTaskCommandHandler.DeleteTask(id);
+            bool delete = await deleteTaskCommandHandler.DeleteTask(id);
             if (!delete)
             {
                 return NotFound();
@@ -75,11 +75,11 @@ public class TasksController(
     }
 
     [HttpPatch("done/{id}")]
-    public ActionResult Done(int id)
+    public async Task<ActionResult> Done(int id)
     {
         try
         {
-            bool done = doneTaskCommandHandler.DoneTask(id);
+            bool done = await doneTaskCommandHandler.DoneTask(id);
             if (!done)
             {
                 return NotFound();

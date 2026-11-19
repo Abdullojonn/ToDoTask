@@ -4,9 +4,9 @@ namespace ToDoApp.Tasks.Handlers;
 
 public class DoneTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext, Logger logger)
 {
-    public bool DoneTask(int id)
+    public async Task<bool> DoneTask(int id)
     {
-        var task = taskStorage.GetById(id);
+        var task = await taskStorage.GetById(id);
         if (task == null)
         {
           throw new ArgumentException($"Задача с id {id} не найдена");
@@ -23,7 +23,7 @@ public class DoneTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserContex
         {
             logger.LogInfo($"Пользователь {userContext.GetRequiredUserId()} отметил задачу {id}");
         }
-        
+
         return result;
     }
 }

@@ -9,7 +9,7 @@ public class UsersController(RegisterUserCommandHandler registerUserCommandHandl
 : ControllerBase
 {
     [HttpPost("register")]
-    public ActionResult<LoginResponse> Register([FromBody] RegisterUserCommand command)
+    public  ActionResult<LoginResponse> Register([FromBody] RegisterUserCommand command)
     {
         try
         {

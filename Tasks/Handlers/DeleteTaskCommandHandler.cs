@@ -5,9 +5,9 @@ namespace ToDoApp.Tasks.Handlers;
 
 public class DeleteTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext, Logger logger)
 {
-    public bool DeleteTask(int id)
+    public async Task<bool> DeleteTask(int id)
     {
-        var task = taskStorage.GetById(id);
+        var task = await taskStorage.GetById(id);
         if (task == null)
         {
             throw new ArgumentException($"Задача с id {id} не найдена");

@@ -14,7 +14,7 @@ public class Database(string connectionString)
     }
 
     // Создаёт таблицы, если их ещё нет. Вызывается один раз при старте программы.
-    public void EnsureCreated()
+    public async Task EnsureCreated()
     {
         using var connection = OpenConnection();
         using var command = connection.CreateCommand();
@@ -36,6 +36,6 @@ public class Database(string connectionString)
             );
 
             """;
-        command.ExecuteNonQuery();
+         await command.ExecuteNonQueryAsync();
     }
 }
