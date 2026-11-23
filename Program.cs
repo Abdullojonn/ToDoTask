@@ -83,7 +83,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-await app.Services.GetRequiredService<Database>().EnsureCreated();
+await app.Services.GetRequiredService<Database>().EnsureCreatedAsync();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -93,4 +93,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

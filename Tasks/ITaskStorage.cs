@@ -4,19 +4,19 @@ namespace ToDoApp.Tasks;
 
 public interface ITaskStorage
 {
-    Task<TodoTask?> GetById(int id);
+    Task<TodoTask?> GetByIdAsync(int id);
 
-    Task<List<TodoTask>> LoadTask();
+    Task<List<TodoTask>> LoadTaskAsync();
 
-    void SaveTask(TodoTask task);
+    Task SaveTaskAsync(TodoTask task);
 
-    bool RemoveTask(int id);
+    Task<bool> RemoveTaskAsync(int id);
 
-    bool Done(int id);
+    Task<bool> DoneAsync(int id);
 
-    List<TodoTask> FindTask(string title, int userId);
+    Task<List<TodoTask>> FindTaskAsync(string title, int userId);
 
-    List<TodoTask> LoadTaskByUserId(int userId);
+    Task<List<TodoTask>> LoadTaskByUserIdAsync(int userId);
 
-    List<TodoTask> SearchByDeadLine(int userId, DateTime now);
+    Task<List<TodoTask>> SearchByDeadLineAsync(int userId, DateTime now);
 }

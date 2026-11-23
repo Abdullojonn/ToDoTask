@@ -2,9 +2,9 @@
 
 public class SQliteTasksStorage(Database database) : ITaskStorage
 {
-    public async Task<TodoTask?> GetById(int id)
+    public async Task<TodoTask?> GetByIdAsync(int id)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
         command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId, DeadLine FROM Tasks WHERE Id = $id";
         command.Parameters.AddWithValue("$id", id);
@@ -25,11 +25,11 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         return null;
     }
 
-    public async Task<List<TodoTask>> LoadTask()
+    public async Task<List<TodoTask>> LoadTaskAsync()
     {
         List<TodoTask> tasks = new List<TodoTask>();
 
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
         command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId, DeadLine FROM Tasks ORDER BY Id";
 
@@ -49,9 +49,9 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         return tasks;
     }
 
-    public void SaveTask(TodoTask task)
+    public async Task SaveTaskAsync(TodoTask task)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = @"INSERT INTO Tasks (Title, CreatedAt, DeadLine, Done, UserId) 
@@ -64,34 +64,34 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         command.Parameters.AddWithValue("$done", task.Done ? 1 : 0);
         command.Parameters.AddWithValue("$userId", task.UserId);
 
-        task.Id = Convert.ToInt32(command.ExecuteScalar());
+        task.Id = Convert.ToInt32(await command.ExecuteScalarAsync());
     }
 
-    public bool RemoveTask(int id)
+    public async Task<bool> RemoveTaskAsync(int id)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "DELETE FROM Tasks Where Id = $id";
         command.Parameters.AddWithValue("$id", id);
 
-        return command.ExecuteNonQuery() > 0;
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 
-    public bool Done(int id)
+    public async Task<bool> DoneAsync(int id)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "UPDATE Tasks SET DONE = 1 Where Id = $id";
         command.Parameters.AddWithValue("$id", id);
 
-        return command.ExecuteNonQuery() > 0;
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 
-    public List<TodoTask> FindTask(string title, int userId)
+    public async Task<List<TodoTask>> FindTaskAsync(string title, int userId)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "SELECT * FROM Tasks WHERE Title LIKE $title AND UserId = $userId";
@@ -99,9 +99,9 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         command.Parameters.AddWithValue("$title", $"%{title}%");
         command.Parameters.AddWithValue("$userId", userId);
 
-        using var reader = command.ExecuteReader();
+        using var reader = await command.ExecuteReaderAsync();
         List<TodoTask> tasks = new List<TodoTask>();
-        while (reader.Read())
+        while (await reader.ReadAsync())
         {
             TodoTask task = new TodoTask();
             task.Id = reader.GetInt32(0);
@@ -116,19 +116,19 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         return tasks;
     }
 
-    public List<TodoTask> LoadTaskByUserId(int userId)
+    public async Task<List<TodoTask>> LoadTaskByUserIdAsync(int userId)
     {
         List<TodoTask> tasks = new List<TodoTask>();
 
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "SELECT id, title, createdAt, done, userId, deadLine FROM Tasks WHERE UserId = $userId";
 
         command.Parameters.AddWithValue("$userId", userId);
 
-        using var reader = command.ExecuteReader();
-        while (reader.Read())
+        using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
             TodoTask task = new TodoTask();
             task.Id = reader.GetInt32(0);
@@ -143,9 +143,9 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         return tasks;
     }
 
-    public List<TodoTask> SearchByDeadLine(int userId, DateTime now)
+    public async Task<List<TodoTask>> SearchByDeadLineAsync(int userId, DateTime now)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "SELECT * FROM Tasks WHERE UserId = $userId AND DONE = 0 AND DeadLine < $now";
@@ -153,9 +153,9 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         command.Parameters.AddWithValue("$userId", userId);
         command.Parameters.AddWithValue("$now", now.ToString("yyyy-MM-dd HH:mm"));
 
-        using var reader = command.ExecuteReader();
+        using var reader = await command.ExecuteReaderAsync();
         List<TodoTask> tasks = new List<TodoTask>();
-        while (reader.Read())
+        while (await reader.ReadAsync())
         {
             TodoTask task = new TodoTask();
             task.Id = reader.GetInt32(0);
@@ -169,6 +169,5 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
 
         return tasks;
     }
-
 
 }

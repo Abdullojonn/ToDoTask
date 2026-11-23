@@ -7,7 +7,7 @@ namespace ToDoApp.Users.Handlers;
 
 public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger)
 {
-    public LoginResponse HandleCommand(LoginCommand command)
+    public async Task<LoginResponse> HandleCommand(LoginCommand command)
     {
         string? name = command.Name?.Trim();
 
@@ -16,7 +16,7 @@ public class LoginUserCommandHandler(IUserStorage userStorage, Logger logger)
             throw new ArgumentException("Имя должно содержать от 1 до 100 символов");
         }
 
-        User? found = userStorage.FindUserByName(name);
+        User? found = await userStorage.FindUserByNameAsync(name);
 
         if (found == null)
         {

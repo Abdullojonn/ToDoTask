@@ -7,7 +7,7 @@ public class DeleteTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserCont
 {
     public async Task<bool> DeleteTask(int id)
     {
-        var task = await taskStorage.GetById(id);
+        var task = await taskStorage.GetByIdAsync(id);
         if (task == null)
         {
             throw new ArgumentException($"Задача с id {id} не найдена");
@@ -18,7 +18,7 @@ public class DeleteTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserCont
             throw new ArgumentException($"Задача с id {id} не принадлежит пользователю {userContext.GetRequiredUserId()}");
         }
 
-        bool result = taskStorage.RemoveTask(task.Id);
+        bool result = await taskStorage.RemoveTaskAsync(task.Id);
 
         if (result)
         {

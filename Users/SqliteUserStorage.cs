@@ -5,16 +5,16 @@ using ToDoApp.Users;
 // Реализует тот же IUserStorage, что и UserStorage (CSV), поэтому обработчики не меняются.
 public class SqliteUserStorage(Database database) : IUserStorage
 {
-    public List<User> LoadUsers()
+    public async Task<List<User>> LoadUsersAsync()
     {
         List<User> users = new List<User>();
 
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
         command.CommandText = "SELECT Id, Name FROM Users ORDER BY Id";
 
-        using var reader = command.ExecuteReader();
-        while (reader.Read())
+        using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
         {
             User user = new User();
             user.Id = reader.GetInt32(0);
@@ -25,9 +25,9 @@ public class SqliteUserStorage(Database database) : IUserStorage
         return users;
     }
 
-    public void SaveUser(User user)
+    public async Task SaveUserAsync(User user)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         // Id не передаём: база назначит его сама и вернёт через RETURNING.
@@ -36,19 +36,19 @@ public class SqliteUserStorage(Database database) : IUserStorage
         command.Parameters.AddWithValue("$name", user.Name);
         command.Parameters.AddWithValue("$password", user.Password);
 
-        user.Id = Convert.ToInt32(command.ExecuteScalar());
+        user.Id = Convert.ToInt32(await command.ExecuteScalarAsync());
     }
 
-    public User? FindUserByName(string name)
+    public async Task<User?> FindUserByNameAsync(string name)
     {
-        using var connection = database.OpenConnection();
+        using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = "SELECT Id, Name, Password FROM Users WHERE Name = $name";
         command.Parameters.AddWithValue("$name", name);
 
-        using var reader = command.ExecuteReader();
-        if (reader.Read())
+        using var reader = await command.ExecuteReaderAsync();
+        if (await reader.ReadAsync())
         {
             User user = new User();
             user.Id = reader.GetInt32(0);

@@ -6,17 +6,17 @@ public class Database(string connectionString)
 {
     // Каждый вызов — новое открытое соединение.
     // Тот, кто его получил, обязан закрыть его через using.
-    public SqliteConnection OpenConnection()
+    public async Task<SqliteConnection> OpenConnectionAsync()
     {
         var connection = new SqliteConnection(connectionString);
-        connection.Open();
+        await connection.OpenAsync();
         return connection;
     }
 
     // Создаёт таблицы, если их ещё нет. Вызывается один раз при старте программы.
-    public async Task EnsureCreated()
+    public async Task EnsureCreatedAsync()
     {
-        using var connection = OpenConnection();
+        using var connection = await OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
         command.CommandText = """

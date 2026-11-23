@@ -6,7 +6,7 @@ public class DoneTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserContex
 {
     public async Task<bool> DoneTask(int id)
     {
-        var task = await taskStorage.GetById(id);
+        var task = await taskStorage.GetByIdAsync(id);
         if (task == null)
         {
           throw new ArgumentException($"Задача с id {id} не найдена");
@@ -17,7 +17,7 @@ public class DoneTaskCommandHandler(ITaskStorage taskStorage, ICurrentUserContex
             throw new ArgumentException($"Задача с id {id} не принадлежит пользователю {userContext.GetRequiredUserId()}");
         }
 
-        bool result = taskStorage.Done(task.Id);
+        bool result = await taskStorage.DoneAsync(task.Id);
 
         if (result)
         {

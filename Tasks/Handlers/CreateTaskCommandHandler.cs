@@ -4,7 +4,7 @@ namespace ToDoApp.Tasks.Handlers;
 
 public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, ICurrentUserContext userContext)
 {
-    public TaskResponse HandleCommand(CreateTaskCommand createTaAskCommand)
+    public async Task<TaskResponse> HandleCommand(CreateTaskCommand createTaAskCommand)
     {
         string title = createTaAskCommand.Title.Trim();
 
@@ -27,7 +27,7 @@ public class CreateTaskCommandHandler(ITaskStorage storage, Logger logger, ICurr
 
         task.DeadLine = deadline;
 
-        storage.SaveTask(task);
+        await storage.SaveTaskAsync(task);
         logger.LogInfo($"Создана задача {task.Id} от пользователья {userContext.GetRequiredUserId()}");
 
         return new TaskResponse

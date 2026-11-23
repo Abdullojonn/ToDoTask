@@ -5,10 +5,10 @@ namespace ToDoApp.Tasks.Handlers;
 
 public class SearchTasksCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext)
 {
-    public List<TaskResponse> HandleCommand(string title)
+    public async Task<List<TaskResponse>> HandleCommand(string title)
     {
         
-        var found = taskStorage.FindTask(title, userContext.GetRequiredUserId());
+        var found = await taskStorage.FindTaskAsync(title, userContext.GetRequiredUserId());
         
         var responses = found
             .Select(task => TaskMapping.MapToResponse(task))

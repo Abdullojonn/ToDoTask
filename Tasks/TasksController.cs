@@ -16,11 +16,11 @@ public class TasksController(
     SearchOverdueTasksCommandHandler searchOverdueTasksCommandHandler) : ControllerBase
 {
     [HttpPost("create")]
-    public ActionResult<TaskResponse> Create([FromBody] CreateTaskCommand command)
+    public async Task<ActionResult<TaskResponse>> Create([FromBody] CreateTaskCommand command)
     {
         try
         {
-            var response = createTaskCommandHandler.HandleCommand(command);
+            var response = await createTaskCommandHandler.HandleCommand(command);
             return response;
         }
         catch (ArgumentException exception)
@@ -34,11 +34,11 @@ public class TasksController(
     }
 
     [HttpGet("get")]
-    public ActionResult<List<TaskResponse>> Get()
+    public async Task<ActionResult<List<TaskResponse>>> Get()
     {
         try
         {
-            var tasks = getTasksCommandHandler.Get();
+            var tasks = await getTasksCommandHandler.Get();
             return Ok(tasks);
         }
         catch (ArgumentException exception)
@@ -98,11 +98,11 @@ public class TasksController(
     }
 
     [HttpGet("search")]
-    public ActionResult Search(string title)
+    public async Task<ActionResult> Search(string title)
     {
         try
         {
-            var found = searchTasksCommandHandler.HandleCommand(title);
+            var found = await searchTasksCommandHandler.HandleCommand(title);
 
             return Ok(found);
         }
@@ -117,11 +117,11 @@ public class TasksController(
     }
 
     [HttpGet("overdue")]
-    public ActionResult Overdue()
+    public async Task<ActionResult> Overdue()
     {
         try
         {
-            var found = searchOverdueTasksCommandHandler.HandleCommand(DateTime.Now);
+            var found = await searchOverdueTasksCommandHandler.HandleCommand(DateTime.Now);
 
             return Ok(found);
         }

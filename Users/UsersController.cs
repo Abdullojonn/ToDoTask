@@ -9,11 +9,11 @@ public class UsersController(RegisterUserCommandHandler registerUserCommandHandl
 : ControllerBase
 {
     [HttpPost("register")]
-    public  ActionResult<LoginResponse> Register([FromBody] RegisterUserCommand command)
+    public  async Task<ActionResult<RegisterResponse>> Register([FromBody] RegisterUserCommand command)
     {
         try
         {
-            var response = registerUserCommandHandler.HandleCommand(command);
+            var response = await registerUserCommandHandler.HandleCommand(command);
             return Ok(response);
         }
         catch (ArgumentException exception)
@@ -27,11 +27,11 @@ public class UsersController(RegisterUserCommandHandler registerUserCommandHandl
     }
 
     [HttpPost("login")]
-    public ActionResult<LoginResponse> Login([FromBody] LoginCommand command)
+    public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginCommand command)
     {
         try
         {
-            var response = loginUserCommandHandler.HandleCommand(command);
+            var response = await loginUserCommandHandler.HandleCommand(command);
             return Ok(response);
         }
         catch (ArgumentException exception)

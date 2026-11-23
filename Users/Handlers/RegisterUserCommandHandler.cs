@@ -2,7 +2,7 @@ namespace ToDoApp.Users.Handlers;
 
 public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
 {
-    public RegisterResponse HandleCommand(RegisterUserCommand command)
+    public async Task<RegisterResponse> HandleCommand(RegisterUserCommand command)
     {
         string? name = command.Name?.Trim();
 
@@ -18,7 +18,7 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             throw new ArgumentException("Пароль должно содержать от 1 до 50 символов");
         }
         
-        var found = userStorage.FindUserByName(name);
+        var found = await userStorage.FindUserByNameAsync(name);
 
         if (found != null)
         {
@@ -31,7 +31,7 @@ public class RegisterUserCommandHandler(IUserStorage userStorage, Logger logger)
             Password = password
         };
 
-        userStorage.SaveUser(user);
+        await userStorage.SaveUserAsync(user);
         logger.LogInfo($"Зарегистрировалься пользователь {name}");
 
         return new RegisterResponse

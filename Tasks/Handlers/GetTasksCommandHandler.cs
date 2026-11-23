@@ -4,9 +4,9 @@ namespace ToDoApp.Tasks.Handlers;
 
 public class GetTasksCommandHandler(ITaskStorage taskStorage, ICurrentUserContext userContext)
 {
-    public List<TaskResponse> Get()
+    public async Task<List<TaskResponse>> Get()
     {
-        List<TodoTask> tasks = taskStorage.LoadTaskByUserId(userContext.GetRequiredUserId());
+        List<TodoTask> tasks = await taskStorage.LoadTaskByUserIdAsync(userContext.GetRequiredUserId());
 
         var responses = tasks
             .Select(task => TaskMapping.MapToResponse(task))
