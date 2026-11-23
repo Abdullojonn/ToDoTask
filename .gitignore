@@ -5,3 +5,6 @@ obj/
 /logs.txt
 /users.csv
 /todo.db
+/todo-ef.db
+/todo-ef.db-shm
+/todo-ef.db-wal

@@ -3,7 +3,7 @@ using ToDoApp.Users;
 
 // Хранит пользователей в SQLite.
 // Реализует тот же IUserStorage, что и UserStorage (CSV), поэтому обработчики не меняются.
-public class SqliteUserStorage(Database database) : IUserStorage
+public class SQLiteUserStorage(Database database) : IUserStorage
 {
     public async Task<List<User>> LoadUsersAsync()
     {

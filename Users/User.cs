@@ -2,8 +2,9 @@ namespace ToDoApp.Users;
 
 public class User
 {
-    public int Id;
+    public int Id { get; set; }
 
-    public string? Name;
-    public string? Password;
+    public string Name { get; set; } = "";
+    
+    public string Password { get; set; } = "";
 }

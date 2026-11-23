@@ -94,7 +94,7 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "SELECT * FROM Tasks WHERE Title LIKE $title AND UserId = $userId";
+        command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId, DeadLine FROM Tasks WHERE Title LIKE $title AND UserId = $userId";
 
         command.Parameters.AddWithValue("$title", $"%{title}%");
         command.Parameters.AddWithValue("$userId", userId);
@@ -148,7 +148,7 @@ public class SQliteTasksStorage(Database database) : ITaskStorage
         using var connection = await database.OpenConnectionAsync();
         using var command = connection.CreateCommand();
 
-        command.CommandText = "SELECT * FROM Tasks WHERE UserId = $userId AND DONE = 0 AND DeadLine < $now";
+        command.CommandText = "SELECT Id, Title, CreatedAt, Done, UserId, DeadLine FROM Tasks WHERE UserId = $userId AND DONE = 0 AND DeadLine < $now";
 
         command.Parameters.AddWithValue("$userId", userId);
         command.Parameters.AddWithValue("$now", now.ToString("yyyy-MM-dd HH:mm"));

@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using System.Text;
 using ToDoApp;
+using ToDoApp.Data;
 using ToDoApp.Tasks;
 using ToDoApp.Tasks.Handlers;
 using ToDoApp.Users.Handlers;
 using ToDoApp.Users.IdAcess;
+using ToDoApp.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,11 +50,18 @@ services.AddSwaggerGen(c =>
 
 services.AddControllers();
 
-services.AddSingleton(new Database("Data Source=todo.db"));
+string databasePath = Path.Combine(builder.Environment.ContentRootPath, "todo-ef.db");
+string connectionString = new Microsoft.Data.Sqlite.SqliteConnectionStringBuilder
+{
+    DataSource = databasePath
+}.ToString();
+
+services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+services.AddSingleton(new Database(connectionString));
 services.AddSingleton<Logger>();
 
 services.AddTransient<ITaskStorage, SQliteTasksStorage>();
-services.AddTransient<IUserStorage, SqliteUserStorage>();
+services.AddTransient<IUserStorage, UserStorage>();
 
 services.AddTransient<RegisterUserCommandHandler>();
 services.AddTransient<CreateTaskCommandHandler>();
@@ -83,7 +93,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-await app.Services.GetRequiredService<Database>().EnsureCreatedAsync();
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.EnsureCreatedAsync();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

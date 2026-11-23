@@ -2,10 +2,17 @@
 
 public class TodoTask
 {
-    public int Id;
-    public string? Title;
-    public DateTime CreatedAt;
-    public DateTime DeadLine;
-    public bool Done = false;
-    public int UserId;
+    public int Id { get; set; }
+
+    public string Title { get; set; } = "";
+
+    public DateTime CreatedAt { get; set; }
+
+    public DateTime DeadLine { get; set; }
+
+    public bool Done { get; set; }
+
+    public int UserId { get; set;}
+
+    public int Usersf;
 }
