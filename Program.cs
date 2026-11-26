@@ -60,7 +60,9 @@ services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionStrin
 services.AddSingleton(new Database(connectionString));
 services.AddSingleton<Logger>();
 
-services.AddTransient<ITaskStorage, SQliteTasksStorage>();
+services.AddScoped<ITaskStorage, EfTaskStorage>();
+
+
 services.AddTransient<IUserStorage, UserStorage>();
 
 services.AddTransient<RegisterUserCommandHandler>();
